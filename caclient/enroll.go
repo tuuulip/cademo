@@ -1,0 +1,3 @@
+package caclient
+
+func Enroll() {}

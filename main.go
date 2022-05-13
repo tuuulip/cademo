@@ -23,11 +23,13 @@ func main() {
 	}
 	fmt.Println("Ca server started.")
 
-	controller := controller.NewController()
+	controller := controller.NewController(caServer)
 
 	router := gin.Default()
 	v1 := router.Group("/api/v1")
 	{
+		v1.GET("/cainfo", controller.CaInfo)
+		v1.POST("/register", controller.Register)
 		v1.POST("/enroll", controller.Enroll)
 	}
 	router.Run(":9300")

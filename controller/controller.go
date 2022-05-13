@@ -27,6 +27,10 @@ func (c *Controller) CaInfo(ctx *gin.Context) {
 }
 
 func (c *Controller) Enroll(ctx *gin.Context) {
+	if err := caclient.Enroll(); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
 	ResponseSuccess(ctx, "ok")
 }
 

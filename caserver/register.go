@@ -1,4 +1,4 @@
-package caclient
+package caserver
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func Register() error {
-	homeDir := "/Users/stephen/develop/gotut/cademo/cahome"
+	homeDir := getHomeDir()
 	clientCfg := &lib.ClientConfig{}
 	client := lib.Client{
 		HomeDir: filepath.Dir(homeDir),
@@ -25,8 +25,6 @@ func Register() error {
 	if err != nil {
 		return err
 	}
-
 	fmt.Printf("Password: %s\n", resp.Secret)
-
 	return nil
 }

@@ -24,6 +24,11 @@ func main() {
 	}
 	fmt.Println("Ca server started.")
 
+	if err := caserver.EnrollAdmin(); err != nil {
+		panic(err)
+	}
+	fmt.Println("Ca admin Enrolled")
+
 	controller := controller.NewController(caServer)
 
 	router := gin.Default()

@@ -1,7 +1,8 @@
-package caclient
+package caserver
 
 import (
 	"bytes"
+	"cademo/config"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
@@ -16,9 +17,20 @@ import (
 )
 
 func Enroll() error {
-	homeDir := "/Users/stephen/develop/gotut/cademo/cahome/admin"
+	return nil
+}
+
+func EnrollAdmin() error {
+	adminDir := getAdminDir()
 	cfg := &lib.ClientConfig{}
-	resp, err := cfg.Enroll("http://admin:adminpw@localhost:7054", homeDir)
+	enrollUrl := fmt.Sprintf(
+		"http://%s:%s@%s:%d",
+		config.Configer.GetString("caadmin.user"),
+		config.Configer.GetString("caadmin.pass"),
+		config.Configer.GetString("caserver.host"),
+		config.Configer.GetInt("caserver.port"),
+	)
+	resp, err := cfg.Enroll(enrollUrl, adminDir)
 	if err != nil {
 		return err
 	}
@@ -28,6 +40,7 @@ func Enroll() error {
 	return nil
 }
 
+// Store enrollment info to disk
 func storeEnrollment(cfg *lib.ClientConfig, enrollment *lib.EnrollmentResponse) error {
 	if err := enrollment.Identity.Store(); err != nil {
 		return err

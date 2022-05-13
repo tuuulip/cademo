@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"cademo/caclient"
+	"cademo/caserver"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hyperledger/fabric-ca/lib"
@@ -27,7 +27,7 @@ func (c *Controller) CaInfo(ctx *gin.Context) {
 }
 
 func (c *Controller) Enroll(ctx *gin.Context) {
-	if err := caclient.Enroll(); err != nil {
+	if err := caserver.Enroll(); err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}
@@ -35,7 +35,7 @@ func (c *Controller) Enroll(ctx *gin.Context) {
 }
 
 func (c *Controller) Register(ctx *gin.Context) {
-	if err := caclient.Register(); err != nil {
+	if err := caserver.Register(); err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}

@@ -2,8 +2,6 @@ package caserver
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"cademo/config"
 
@@ -11,7 +9,7 @@ import (
 )
 
 func GetServer() *lib.Server {
-	homeDir := getCaHome()
+	homeDir := getHomeDir()
 	dbsrc := fmt.Sprintf(
 		"host=%s port=5432 user=%s password=%s dbname=%s sslmode=%s",
 		config.Configer.GetString("cadb.host"),
@@ -48,12 +46,4 @@ func GetServer() *lib.Server {
 			ConfigFilePath: homeDir,
 		},
 	}
-}
-
-func getCaHome() string {
-	pwd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	return filepath.Join(pwd, config.Configer.GetString("cahome"))
 }

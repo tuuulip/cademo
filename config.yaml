@@ -1,6 +1,10 @@
 server:
   port: 9300
 
+caserver:
+  host: localhost
+  port: 7054
+
 cadb:
   host: 10.10.7.35
   user: root

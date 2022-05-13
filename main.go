@@ -2,6 +2,7 @@ package main
 
 import (
 	"cademo/caserver"
+	"cademo/config"
 	"cademo/controller"
 	"fmt"
 	"os"
@@ -32,7 +33,8 @@ func main() {
 		v1.POST("/register", controller.Register)
 		v1.POST("/enroll", controller.Enroll)
 	}
-	router.Run(":9300")
+	port := config.Configer.GetInt("server.port")
+	router.Run(fmt.Sprintf(":%d", port))
 	fmt.Println("Logic server started.")
 
 	stop := make(chan os.Signal, 1)

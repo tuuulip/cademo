@@ -8,7 +8,7 @@ import (
 
 func GetServer() *lib.Server {
 	homeDir := "/Users/stephen/develop/gotut/cademo/cahome"
-	dbs := fmt.Sprintf(
+	dbsrc := fmt.Sprintf(
 		"host=%s port=5432 user=%s password=%s dbname=%s sslmode=%s",
 		"10.10.7.35",
 		"root",
@@ -16,11 +16,21 @@ func GetServer() *lib.Server {
 		"fabric_ca_zoo",
 		"disable",
 	)
+	id := lib.CAConfigIdentity{
+		Name:           "admin",
+		Pass:           "adminpw",
+		MaxEnrollments: -1,
+	}
+	db := lib.CAConfigDB{
+		Type:       "postgres",
+		Datasource: dbsrc,
+	}
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
-			DB: lib.CAConfigDB{
-				Type:       "postgres",
-				Datasource: dbs,
+			DB: db,
+			Registry: lib.CAConfigRegistry{
+				MaxEnrollments: -1,
+				Identities:     []lib.CAConfigIdentity{id},
 			},
 		},
 	}

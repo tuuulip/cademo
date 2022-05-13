@@ -8,7 +8,7 @@ import (
 )
 
 func Register() error {
-	homeDir := "/Users/stephen/develop/gotut/cademo/cahome/client"
+	homeDir := "/Users/stephen/develop/gotut/cademo/cahome"
 	clientCfg := &lib.ClientConfig{}
 	client := lib.Client{
 		HomeDir: filepath.Dir(homeDir),

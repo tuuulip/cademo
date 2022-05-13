@@ -1,2 +1,15 @@
 server:
   port: 9300
+
+cadb:
+  host: 10.10.7.35
+  user: root
+  password: baas123
+  dbname: fabric_ca_zoo
+  sslmode: disable
+
+caadmin:
+  user: admin
+  pass: adminpw
+
+cahome: cahome

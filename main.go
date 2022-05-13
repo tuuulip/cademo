@@ -41,7 +41,7 @@ func main() {
 		v1.POST("/register", controller.Register)
 		v1.POST("/enroll", controller.Enroll)
 	}
-	port := config.Configer.GetInt("server.port")
+	port := config.C.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))
 	logger.Info("Logic server started.")
 

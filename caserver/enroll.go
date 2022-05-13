@@ -20,15 +20,23 @@ func Enroll() error {
 	return nil
 }
 
+// Enroll admin at server start.
 func EnrollAdmin() error {
 	adminDir := getAdminDir()
+
+	_, err := os.Stat(adminDir)
+	if err == nil {
+		logger.Info("Admin already enrolled.")
+		return nil
+	}
+
 	cfg := &lib.ClientConfig{}
 	enrollUrl := fmt.Sprintf(
 		"http://%s:%s@%s:%d",
-		config.Configer.GetString("caadmin.user"),
-		config.Configer.GetString("caadmin.pass"),
-		config.Configer.GetString("caserver.host"),
-		config.Configer.GetInt("caserver.port"),
+		config.C.GetString("caadmin.user"),
+		config.C.GetString("caadmin.pass"),
+		config.C.GetString("caserver.host"),
+		config.C.GetInt("caserver.port"),
 	)
 	resp, err := cfg.Enroll(enrollUrl, adminDir)
 	if err != nil {
@@ -37,6 +45,7 @@ func EnrollAdmin() error {
 	if err := storeEnrollment(cfg, resp); err != nil {
 		return err
 	}
+	logger.Info("Enroll admin success.")
 	return nil
 }
 

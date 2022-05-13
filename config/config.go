@@ -8,25 +8,25 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Configer = viper.GetViper()
+var C = viper.GetViper()
 
 func init() {
-	Configer.AutomaticEnv()
-	Configer.SetConfigName("config")
-	Configer.SetConfigType("yaml")
+	C.AutomaticEnv()
+	C.SetConfigName("config")
+	C.SetConfigType("yaml")
 
 	// current dir or parent dir
-	Configer.AddConfigPath(".")
-	Configer.AddConfigPath("..")
+	C.AddConfigPath(".")
+	C.AddConfigPath("..")
 
 	cp := os.Getenv("CONFIG_PATH")
 	if cp != "" {
-		Configer.AddConfigPath(cp)
+		C.AddConfigPath(cp)
 	}
 
-	Configer.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	C.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-	err := Configer.ReadInConfig()
+	err := C.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}

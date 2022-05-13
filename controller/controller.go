@@ -35,9 +35,10 @@ func (c *Controller) Enroll(ctx *gin.Context) {
 }
 
 func (c *Controller) Register(ctx *gin.Context) {
-	if err := caserver.Register(); err != nil {
+	passwd, err := caserver.Register()
+	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}
-	ResponseSuccess(ctx, "ok")
+	ResponseSuccess(ctx, passwd)
 }

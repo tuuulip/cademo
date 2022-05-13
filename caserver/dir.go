@@ -11,7 +11,7 @@ func getHomeDir() string {
 	if err != nil {
 		panic(err)
 	}
-	return filepath.Join(pwd, config.Configer.GetString("cahome"))
+	return filepath.Join(pwd, config.C.GetString("cahome"))
 }
 
 func getAdminDir() string {

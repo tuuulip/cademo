@@ -1,16 +1,25 @@
 package caserver
 
 import (
-	"path/filepath"
+	"cademo/config"
+	"fmt"
 
+	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
 func Register() (string, error) {
-	homeDir := getHomeDir()
-	clientCfg := &lib.ClientConfig{}
+	homeDir := getAdminDir()
+	caurl := fmt.Sprintf(
+		"http://%s:%d",
+		config.C.GetString("caserver.host"),
+		config.C.GetInt("caserver.port"),
+	)
+	clientCfg := &lib.ClientConfig{
+		URL: caurl,
+	}
 	client := lib.Client{
-		HomeDir: filepath.Dir(homeDir),
+		HomeDir: homeDir,
 		Config:  clientCfg,
 	}
 
@@ -19,11 +28,17 @@ func Register() (string, error) {
 		return "", err
 	}
 
-	clientCfg.ID.CAName = clientCfg.CAName
-	resp, err := id.Register(&clientCfg.ID)
+	req := &api.RegistrationRequest{
+		Name:        "peer1",
+		Type:        "peer",
+		Affiliation: "org1.department1",
+		Secret:      "peer1pw",
+		CAName:      clientCfg.CAName,
+	}
+	resp, err := id.Register(req)
 	if err != nil {
 		return "", err
 	}
-	logger.Info("Register success")
+	logger.Info("Register %s success.", req.Name)
 	return resp.Secret, nil
 }

@@ -1,13 +1,12 @@
 package caserver
 
 import (
-	"fmt"
 	"path/filepath"
 
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
-func Register() error {
+func Register() (string, error) {
 	homeDir := getHomeDir()
 	clientCfg := &lib.ClientConfig{}
 	client := lib.Client{
@@ -17,14 +16,14 @@ func Register() error {
 
 	id, err := client.LoadMyIdentity()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	clientCfg.ID.CAName = clientCfg.CAName
 	resp, err := id.Register(&clientCfg.ID)
 	if err != nil {
-		return err
+		return "", err
 	}
-	fmt.Printf("Password: %s\n", resp.Secret)
-	return nil
+	logger.Info("Register success")
+	return resp.Secret, nil
 }

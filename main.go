@@ -4,6 +4,7 @@ import (
 	"cademo/caserver"
 	"cademo/config"
 	"cademo/controller"
+	"cademo/log"
 	"fmt"
 	"os"
 	"os/signal"
@@ -12,8 +13,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var logger = log.GetLogger("info")
+
 func main() {
-	fmt.Println("Fabric Ca Demo.")
+	logger.Info("Fabric Ca Demo.")
 
 	caServer := caserver.GetServer()
 	if err := caServer.Init(false); err != nil {
@@ -22,12 +25,12 @@ func main() {
 	if err := caServer.Start(); err != nil {
 		panic(err)
 	}
-	fmt.Println("Ca server started.")
+	logger.Info("Ca server started.")
 
 	if err := caserver.EnrollAdmin(); err != nil {
 		panic(err)
 	}
-	fmt.Println("Ca admin Enrolled")
+	logger.Info("Ca admin Enrolled")
 
 	controller := controller.NewController(caServer)
 
@@ -40,10 +43,10 @@ func main() {
 	}
 	port := config.Configer.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))
-	fmt.Println("Logic server started.")
+	logger.Info("Logic server started.")
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 	<-stop
-	fmt.Println("Demo shutdown.")
+	logger.Info("Demo shutdown.")
 }

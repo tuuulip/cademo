@@ -4,9 +4,12 @@ import (
 	"fmt"
 
 	"cademo/config"
+	"cademo/log"
 
 	"github.com/hyperledger/fabric-ca/lib"
 )
+
+var logger = log.GetLogger("info")
 
 func GetServer() *lib.Server {
 	homeDir := getHomeDir()

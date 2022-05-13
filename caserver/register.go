@@ -39,6 +39,6 @@ func Register() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	logger.Info("Register %s success.", req.Name)
+	logger.Infof("Register %s success.", req.Name)
 	return resp.Secret, nil
 }

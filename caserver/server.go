@@ -13,6 +13,21 @@ var logger = log.GetLogger("info")
 
 func GetServer() *lib.Server {
 	homeDir := getHomeDir()
+
+	serverCfg := getServerCfg()
+	blockingStart := false
+	return &lib.Server{
+		HomeDir:       homeDir,
+		Config:        serverCfg,
+		BlockingStart: blockingStart,
+		CA: lib.CA{
+			Config:         &serverCfg.CAcfg,
+			ConfigFilePath: homeDir,
+		},
+	}
+}
+
+func getServerCfg() *lib.ServerConfig {
 	dbsrc := fmt.Sprintf(
 		"host=%s port=5432 user=%s password=%s dbname=%s sslmode=%s",
 		config.C.GetString("cadb.host"),
@@ -24,29 +39,35 @@ func GetServer() *lib.Server {
 	id := lib.CAConfigIdentity{
 		Name:           config.C.GetString("caadmin.user"),
 		Pass:           config.C.GetString("caadmin.pass"),
+		Type:           "client",
 		MaxEnrollments: -1,
+		Attrs: map[string]string{
+			"hf.Registrar.Roles":         "*",
+			"hf.Registrar.DelegateRoles": "*",
+			"hf.Revoker":                 "true",
+			"hf.IntermediateCA":          "true",
+			"hf.GenCRL":                  "true",
+			"hf.Registrar.Attributes":    "*",
+			"hf.AffiliationMgr":          "true",
+		},
 	}
 	db := lib.CAConfigDB{
 		Type:       "postgres",
 		Datasource: dbsrc,
 	}
+	affiliations := map[string]interface{}{
+		"org1": []string{"department1", "department2"},
+		"org2": []string{"department1", "department2"},
+	}
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
-			DB: db,
+			DB:           db,
+			Affiliations: affiliations,
 			Registry: lib.CAConfigRegistry{
 				MaxEnrollments: -1,
 				Identities:     []lib.CAConfigIdentity{id},
 			},
 		},
 	}
-	blockingStart := false
-	return &lib.Server{
-		HomeDir:       homeDir,
-		Config:        serverCfg,
-		BlockingStart: blockingStart,
-		CA: lib.CA{
-			Config:         &serverCfg.CAcfg,
-			ConfigFilePath: homeDir,
-		},
-	}
+	return serverCfg
 }

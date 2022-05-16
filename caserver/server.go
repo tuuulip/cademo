@@ -66,7 +66,7 @@ func getServerCfg() *lib.ServerConfig {
 	}
 	// set csr info
 	csrName := csr.Name{
-		C:  "China",
+		C:  "CN",
 		ST: "Guang Dong",
 		L:  "Guang Zhou",
 		O:  "My Company",

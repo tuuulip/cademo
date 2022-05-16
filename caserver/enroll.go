@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/hyperledger/fabric-ca/lib"
@@ -17,7 +18,6 @@ import (
 )
 
 func Enroll(user, pass string) (*lib.EnrollmentResponse, error) {
-	adminDir := getAdminDir()
 	cfg := &lib.ClientConfig{}
 	enrollUrl := fmt.Sprintf(
 		"http://%s:%s@%s:%d",
@@ -25,7 +25,11 @@ func Enroll(user, pass string) (*lib.EnrollmentResponse, error) {
 		config.C.GetString("caserver.host"),
 		config.C.GetInt("caserver.port"),
 	)
-	resp, err := cfg.Enroll(enrollUrl, adminDir)
+	saveDir := filepath.Join(getHomeDir(), "peers/peer1")
+	resp, err := cfg.Enroll(enrollUrl, saveDir)
+	if err := storeEnrollment(cfg, resp); err != nil {
+		return nil, err
+	}
 	return resp, err
 }
 

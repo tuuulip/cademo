@@ -6,18 +6,20 @@ import (
 
 	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
+	"github.com/hyperledger/fabric-ca/lib/tls"
 )
 
 func Register(req *api.RegistrationRequest) (string, error) {
 	homeDir := getAdminDir()
-	caurl := fmt.Sprintf(
-		"http://%s:%d",
-		config.C.GetString("caserver.host"),
-		config.C.GetInt("caserver.port"),
-	)
+	caurl := getRegisterUrl()
 
+	tls := tls.ClientTLSConfig{
+		Enabled:   config.C.GetBool("caserver.tls.enabled"),
+		CertFiles: []string{"../tls-cert.pem"},
+	}
 	clientCfg := &lib.ClientConfig{
 		URL: caurl,
+		TLS: tls,
 	}
 	client := lib.Client{
 		HomeDir: homeDir,
@@ -35,4 +37,17 @@ func Register(req *api.RegistrationRequest) (string, error) {
 	}
 	logger.Infof("Register %s success.", req.Name)
 	return resp.Secret, nil
+}
+
+func getRegisterUrl() string {
+	proto := "http"
+	if config.C.GetBool("caserver.tls.enabled") {
+		proto = "https"
+	}
+	return fmt.Sprintf(
+		"%s://%s:%d",
+		proto,
+		config.C.GetString("caserver.host"),
+		config.C.GetInt("caserver.port"),
+	)
 }

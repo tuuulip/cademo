@@ -14,20 +14,25 @@ import (
 	"strings"
 
 	"github.com/hyperledger/fabric-ca/lib"
+	"github.com/hyperledger/fabric-ca/lib/tls"
 	"github.com/hyperledger/fabric-ca/util"
 	"github.com/pkg/errors"
 )
 
 func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
-	cfg := &lib.ClientConfig{}
-	enrollUrl := fmt.Sprintf(
-		"http://%s:%s@%s:%d",
-		req.User, req.Password,
-		config.C.GetString("caserver.host"),
-		config.C.GetInt("caserver.port"),
-	)
+	tls := tls.ClientTLSConfig{
+		Enabled:   config.C.GetBool("caserver.tls.enabled"),
+		CertFiles: []string{"../../tls-cert.pem"},
+	}
+	cfg := &lib.ClientConfig{
+		TLS: tls,
+	}
+	enrollUrl := getEnrollUrl(req.User, req.Password)
 	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
+	if err != nil {
+		return nil, err
+	}
 	if err := storeEnrollment(cfg, resp); err != nil {
 		return nil, err
 	}
@@ -44,14 +49,14 @@ func EnrollAdmin() error {
 		return nil
 	}
 
-	cfg := &lib.ClientConfig{}
-	enrollUrl := fmt.Sprintf(
-		"http://%s:%s@%s:%d",
-		config.C.GetString("caadmin.user"),
-		config.C.GetString("caadmin.pass"),
-		config.C.GetString("caserver.host"),
-		config.C.GetInt("caserver.port"),
-	)
+	tls := tls.ClientTLSConfig{
+		Enabled:   config.C.GetBool("caserver.tls.enabled"),
+		CertFiles: []string{"../tls-cert.pem"},
+	}
+	cfg := &lib.ClientConfig{
+		TLS: tls,
+	}
+	enrollUrl := getEnrollUrl(config.C.GetString("caadmin.user"), config.C.GetString("caadmin.pass"))
 	resp, err := cfg.Enroll(enrollUrl, adminDir)
 	if err != nil {
 		return err
@@ -61,6 +66,18 @@ func EnrollAdmin() error {
 	}
 	logger.Info("Enroll admin success.")
 	return nil
+}
+
+// get enroll url
+func getEnrollUrl(user, pass string) string {
+	host := config.C.GetString("caserver.host")
+	port := config.C.GetInt("caserver.port")
+	proto := "http"
+	if config.C.GetBool("caserver.tls.enabled") {
+		proto = "https"
+	}
+	url := fmt.Sprintf("%s://%s:%s@%s:%d", proto, user, pass, host, port)
+	return url
 }
 
 // Store enrollment info to disk

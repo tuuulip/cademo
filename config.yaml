@@ -2,8 +2,10 @@ server:
   port: 9300
 
 caserver:
-  host: localhost
+  host: 0.0.0.0
   port: 7054
+  tls:
+    enabled: true
 
 cadb:
   host: 10.10.7.35

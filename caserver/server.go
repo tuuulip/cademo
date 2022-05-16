@@ -60,6 +60,7 @@ func getServerCfg() *lib.ServerConfig {
 		Type:       "postgres",
 		Datasource: dbsrc,
 	}
+	db = lib.CAConfigDB{}
 	// set affiliations
 	affiliations := map[string]interface{}{
 		"org1": []string{"department1", "department2"},
@@ -76,10 +77,12 @@ func getServerCfg() *lib.ServerConfig {
 	csr := api.CSRInfo{
 		CN:    "fabric-ca-server",
 		Names: []csr.Name{csrName},
+		Hosts: []string{config.C.GetString("caserver.host")},
 	}
 	// set tls
 	tls := tls.ServerTLSConfig{
-		Enabled: false,
+		Enabled:  config.C.GetBool("caserver.tls.enabled"),
+		CertFile: "tls-cert.pem",
 	}
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{

@@ -8,7 +8,7 @@ import (
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
-func Register() (string, error) {
+func Register(req *api.RegistrationRequest) (string, error) {
 	homeDir := getAdminDir()
 	caurl := fmt.Sprintf(
 		"http://%s:%d",
@@ -28,13 +28,6 @@ func Register() (string, error) {
 		return "", err
 	}
 
-	req := &api.RegistrationRequest{
-		Name:        "peer1",
-		Type:        "peer",
-		Affiliation: "org1.department1",
-		Secret:      "peer1pw",
-		CAName:      clientCfg.CAName,
-	}
 	resp, err := id.Register(req)
 	if err != nil {
 		return "", err

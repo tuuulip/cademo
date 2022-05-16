@@ -4,6 +4,7 @@ import (
 	"cademo/caserver"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
@@ -35,7 +36,12 @@ func (c *Controller) Enroll(ctx *gin.Context) {
 }
 
 func (c *Controller) Register(ctx *gin.Context) {
-	passwd, err := caserver.Register()
+	req := &api.RegistrationRequest{}
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	passwd, err := caserver.Register(req)
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return

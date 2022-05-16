@@ -9,7 +9,7 @@ import (
 )
 
 func Register(req *api.RegistrationRequest) (string, error) {
-	homeDir := getAdminDir()
+	homeDir := getHomeDir()
 	caurl := getRegisterUrl()
 
 	clientCfg := &lib.ClientConfig{

@@ -13,7 +13,3 @@ func getHomeDir() string {
 	}
 	return filepath.Join(pwd, config.C.GetString("cahome"))
 }
-
-func getAdminDir() string {
-	return filepath.Join(getHomeDir(), "admin")
-}

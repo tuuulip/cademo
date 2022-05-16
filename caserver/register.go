@@ -15,6 +15,7 @@ func Register(req *api.RegistrationRequest) (string, error) {
 		config.C.GetString("caserver.host"),
 		config.C.GetInt("caserver.port"),
 	)
+
 	clientCfg := &lib.ClientConfig{
 		URL: caurl,
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
+	"github.com/hyperledger/fabric-ca/lib/tls"
 )
 
 var logger = log.GetLogger("info")
@@ -38,6 +39,7 @@ func getServerCfg() *lib.ServerConfig {
 		config.C.GetString("cadb.dbname"),
 		config.C.GetString("cadb.sslmode"),
 	)
+	// set admin info
 	id := lib.CAConfigIdentity{
 		Name:           config.C.GetString("caadmin.user"),
 		Pass:           config.C.GetString("caadmin.pass"),
@@ -53,24 +55,31 @@ func getServerCfg() *lib.ServerConfig {
 			"hf.AffiliationMgr":          "true",
 		},
 	}
+	// set db config
 	db := lib.CAConfigDB{
 		Type:       "postgres",
 		Datasource: dbsrc,
 	}
+	// set affiliations
 	affiliations := map[string]interface{}{
 		"org1": []string{"department1", "department2"},
 		"org2": []string{"department1", "department2"},
 	}
+	// set csr info
 	csrName := csr.Name{
 		C:  "China",
 		ST: "Guang Dong",
 		L:  "Guang Zhou",
 		O:  "My Company",
-		OU: "Development",
+		OU: "Administration",
 	}
 	csr := api.CSRInfo{
 		CN:    "fabric-ca-server",
 		Names: []csr.Name{csrName},
+	}
+	// set tls
+	tls := tls.ServerTLSConfig{
+		Enabled: false,
 	}
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
@@ -82,6 +91,7 @@ func getServerCfg() *lib.ServerConfig {
 			},
 			CSR: csr,
 		},
+		TLS: tls,
 	}
 	return serverCfg
 }

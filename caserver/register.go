@@ -6,20 +6,15 @@ import (
 
 	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
-	"github.com/hyperledger/fabric-ca/lib/tls"
 )
 
 func Register(req *api.RegistrationRequest) (string, error) {
 	homeDir := getAdminDir()
 	caurl := getRegisterUrl()
 
-	tls := tls.ClientTLSConfig{
-		Enabled:   config.C.GetBool("caserver.tls.enabled"),
-		CertFiles: []string{"../tls-cert.pem"},
-	}
 	clientCfg := &lib.ClientConfig{
 		URL: caurl,
-		TLS: tls,
+		TLS: getClientTls(),
 	}
 	client := lib.Client{
 		HomeDir: homeDir,

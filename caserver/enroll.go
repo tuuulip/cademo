@@ -14,18 +14,13 @@ import (
 	"strings"
 
 	"github.com/hyperledger/fabric-ca/lib"
-	"github.com/hyperledger/fabric-ca/lib/tls"
 	"github.com/hyperledger/fabric-ca/util"
 	"github.com/pkg/errors"
 )
 
 func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
-	tls := tls.ClientTLSConfig{
-		Enabled:   config.C.GetBool("caserver.tls.enabled"),
-		CertFiles: []string{"../../tls-cert.pem"},
-	}
 	cfg := &lib.ClientConfig{
-		TLS: tls,
+		TLS: getClientTls(),
 	}
 	enrollUrl := getEnrollUrl(req.User, req.Password)
 	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
@@ -49,12 +44,8 @@ func EnrollAdmin() error {
 		return nil
 	}
 
-	tls := tls.ClientTLSConfig{
-		Enabled:   config.C.GetBool("caserver.tls.enabled"),
-		CertFiles: []string{"../tls-cert.pem"},
-	}
 	cfg := &lib.ClientConfig{
-		TLS: tls,
+		TLS: getClientTls(),
 	}
 	enrollUrl := getEnrollUrl(config.C.GetString("caadmin.user"), config.C.GetString("caadmin.pass"))
 	resp, err := cfg.Enroll(enrollUrl, adminDir)

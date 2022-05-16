@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
 	"github.com/hyperledger/fabric-ca/util"
 	"github.com/pkg/errors"
@@ -21,6 +22,29 @@ import (
 func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	cfg := &lib.ClientConfig{
 		TLS: getClientTls(),
+	}
+	enrollUrl := getEnrollUrl(req.User, req.Password)
+	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
+	resp, err := cfg.Enroll(enrollUrl, saveDir)
+	if err != nil {
+		return nil, err
+	}
+	if err := storeEnrollment(cfg, resp); err != nil {
+		return nil, err
+	}
+	return resp, err
+}
+
+func EnrollTls(req *message.Enroll) (*lib.EnrollmentResponse, error) {
+	host := fmt.Sprintf("%s-%s", req.User, req.Org)
+	cfg := &lib.ClientConfig{
+		TLS: getClientTls(),
+		Enrollment: api.EnrollmentRequest{
+			Profile: "tls",
+		},
+		CSR: api.CSRInfo{
+			Hosts: []string{host},
+		},
 	}
 	enrollUrl := getEnrollUrl(req.User, req.Password)
 	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)

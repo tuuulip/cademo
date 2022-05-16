@@ -16,8 +16,17 @@ import (
 	"github.com/pkg/errors"
 )
 
-func Enroll() error {
-	return nil
+func Enroll(user, pass string) (*lib.EnrollmentResponse, error) {
+	adminDir := getAdminDir()
+	cfg := &lib.ClientConfig{}
+	enrollUrl := fmt.Sprintf(
+		"http://%s:%s@%s:%d",
+		user, pass,
+		config.C.GetString("caserver.host"),
+		config.C.GetInt("caserver.port"),
+	)
+	resp, err := cfg.Enroll(enrollUrl, adminDir)
+	return resp, err
 }
 
 // Enroll admin at server start.

@@ -38,7 +38,8 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 func EnrollTls(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	host := fmt.Sprintf("%s-%s", req.User, req.Org)
 	cfg := &lib.ClientConfig{
-		TLS: getClientTls(),
+		TLS:    getClientTls(),
+		MSPDir: "tls-msp",
 		Enrollment: api.EnrollmentRequest{
 			Profile: "tls",
 		},

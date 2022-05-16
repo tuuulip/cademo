@@ -35,7 +35,7 @@ func (c *Controller) Enroll(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := caserver.Enroll(req.User, req.Password)
+	resp, err := caserver.Enroll(req)
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return

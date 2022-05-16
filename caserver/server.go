@@ -6,6 +6,8 @@ import (
 	"cademo/config"
 	"cademo/log"
 
+	"github.com/cloudflare/cfssl/csr"
+	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
@@ -59,6 +61,17 @@ func getServerCfg() *lib.ServerConfig {
 		"org1": []string{"department1", "department2"},
 		"org2": []string{"department1", "department2"},
 	}
+	csrName := csr.Name{
+		C:  "China",
+		ST: "Guang Dong",
+		L:  "Guang Zhou",
+		O:  "My Company",
+		OU: "Development",
+	}
+	csr := api.CSRInfo{
+		CN:    "fabric-ca-server",
+		Names: []csr.Name{csrName},
+	}
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
 			DB:           db,
@@ -67,6 +80,7 @@ func getServerCfg() *lib.ServerConfig {
 				MaxEnrollments: -1,
 				Identities:     []lib.CAConfigIdentity{id},
 			},
+			CSR: csr,
 		},
 	}
 	return serverCfg

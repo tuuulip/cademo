@@ -3,6 +3,7 @@ package caserver
 import (
 	"bytes"
 	"cademo/config"
+	"cademo/message"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
@@ -17,15 +18,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-func Enroll(user, pass string) (*lib.EnrollmentResponse, error) {
+func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	cfg := &lib.ClientConfig{}
 	enrollUrl := fmt.Sprintf(
 		"http://%s:%s@%s:%d",
-		user, pass,
+		req.User, req.Password,
 		config.C.GetString("caserver.host"),
 		config.C.GetInt("caserver.port"),
 	)
-	saveDir := filepath.Join(getHomeDir(), "peers/peer1")
+	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
 	if err := storeEnrollment(cfg, resp); err != nil {
 		return nil, err

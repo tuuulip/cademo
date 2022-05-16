@@ -50,7 +50,7 @@ func (c *Controller) EnrollTls(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := caserver.EnrollTls(req)
+	resp, err := caserver.EnrollTLS(req)
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return

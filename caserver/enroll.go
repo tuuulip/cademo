@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
@@ -32,10 +33,13 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	if err := storeEnrollment(cfg, resp); err != nil {
 		return nil, err
 	}
+	if err := storeTlsCA(saveDir); err != nil {
+		return nil, err
+	}
 	return resp, err
 }
 
-func EnrollTls(req *message.Enroll) (*lib.EnrollmentResponse, error) {
+func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	host := fmt.Sprintf("%s-%s", req.User, req.Org)
 	cfg := &lib.ClientConfig{
 		TLS:    getClientTls(),
@@ -111,6 +115,17 @@ func storeEnrollment(cfg *lib.ClientConfig, enrollment *lib.EnrollmentResponse) 
 		return err
 	}
 	return nil
+}
+
+// Store tls ca cert
+func storeTlsCA(home string) error {
+	tlsCaPath := filepath.Join(getHomeDir(), "ca-cert.pem")
+	tlsCaCert, err := ioutil.ReadFile(tlsCaPath)
+	if err != nil {
+		return err
+	}
+	dir := filepath.Join(home, "msp", "tlscacerts")
+	return storeToFile("TLS Ca Cert", dir, "ca.crt", tlsCaCert)
 }
 
 // Store the CAChain in the CACerts folder of MSP (Membership Service Provider)

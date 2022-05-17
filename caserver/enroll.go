@@ -60,12 +60,13 @@ func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	if err := storeEnrollment(cfg, resp); err != nil {
 		return nil, err
 	}
+
 	return resp, err
 }
 
 // Enroll admin at server start.
 func EnrollAdmin() error {
-	adminDir := getHomeDir()
+	adminDir := getAdminDir()
 
 	_, err := os.Stat(filepath.Join(adminDir, "msp", "signcerts"))
 	if err == nil {

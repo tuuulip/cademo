@@ -72,11 +72,21 @@ func (c *Controller) Register(ctx *gin.Context) {
 	ResponseSuccess(ctx, passwd)
 }
 
-func (c *Controller) IdentityList(ctx *gin.Context) {
+func (c *Controller) AllIdentities(ctx *gin.Context) {
 	ids, err := caserver.GetAllIdentities()
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}
 	ResponseSuccess(ctx, ids)
+}
+
+func (c *Controller) AllCertificates(ctx *gin.Context) {
+	certs, displays, err := caserver.GetAllCertificates()
+	_ = displays
+	if err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, certs)
 }

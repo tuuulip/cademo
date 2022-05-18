@@ -2,15 +2,11 @@ package caserver
 
 import (
 	"cademo/config"
-	"crypto/x509"
 	"encoding/json"
-	"encoding/pem"
 	"fmt"
 
-	"github.com/grantae/certinfo"
 	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
-	"github.com/pkg/errors"
 )
 
 func Register(req *api.RegistrationRequest) (string, error) {
@@ -44,44 +40,6 @@ func GetAllIdentities() ([]api.IdentityInfo, error) {
 		return nil
 	})
 	return identities, err
-}
-
-// get all certificates
-func GetAllCertificates() ([]x509.Certificate, []string, error) {
-	id, err := getAdminIdentity()
-	if err != nil {
-		return nil, nil, err
-	}
-	req := &api.GetCertificatesRequest{}
-	certs := []x509.Certificate{}
-	certsDisplay := []string{}
-	err = id.GetCertificates(req, func(d *json.Decoder) error {
-		type certPEM struct {
-			PEM string `db:"pem"`
-		}
-		var cert certPEM
-		err := d.Decode(&cert)
-		if err != nil {
-			return err
-		}
-		block, rest := pem.Decode([]byte(cert.PEM))
-		if block == nil || len(rest) > 0 {
-			return errors.New("Certificate decoding error")
-		}
-		certificate, err := x509.ParseCertificate(block.Bytes)
-		if err != nil {
-			return err
-		}
-		certs = append(certs, *certificate)
-
-		result, err := certinfo.CertificateText(certificate)
-		if err != nil {
-			return err
-		}
-		certsDisplay = append(certsDisplay, result)
-		return nil
-	})
-	return certs, certsDisplay, err
 }
 
 // load admin identity

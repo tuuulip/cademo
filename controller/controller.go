@@ -81,9 +81,14 @@ func (c *Controller) AllIdentities(ctx *gin.Context) {
 	ResponseSuccess(ctx, ids)
 }
 
-func (c *Controller) AllCertificates(ctx *gin.Context) {
-	certs, displays, err := caserver.GetAllCertificates()
-	_ = displays
+func (c *Controller) CertificateList(ctx *gin.Context) {
+	req := &api.GetCertificatesRequest{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+
+	certs, err := caserver.GetCertificateList(req)
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return

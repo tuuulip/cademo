@@ -59,6 +59,22 @@ func getAdminIdentity() (*lib.Identity, error) {
 	return client.LoadMyIdentity()
 }
 
+// get identity
+func loadIdentity(home string) (*lib.Identity, error) {
+	caurl := getRegisterUrl()
+
+	clientCfg := &lib.ClientConfig{
+		URL: caurl,
+		TLS: getClientTls(),
+	}
+	client := lib.Client{
+		HomeDir: home,
+		Config:  clientCfg,
+	}
+
+	return client.LoadMyIdentity()
+}
+
 // combine register url
 func getRegisterUrl() string {
 	proto := "http"

@@ -40,6 +40,7 @@ func main() {
 		v1.GET("/cainfo", controller.CaInfo)
 		v1.POST("/register", controller.Register)
 		v1.POST("/enroll", controller.Enroll)
+		v1.POST("/reenroll", controller.ReEnroll)
 		v1.POST("/enrolltls", controller.EnrollTls)
 		v1.GET("/identities", controller.AllIdentities)
 		v1.POST("/certificates", controller.CertificateList)

@@ -65,6 +65,25 @@ func getServerCfg() *lib.ServerConfig {
 		"org2": []string{"department1", "department2"},
 	}
 	// set csr info
+
+	csr := defaultCSR()
+	// set server config
+	serverCfg := &lib.ServerConfig{
+		CAcfg: lib.CAConfig{
+			DB:           db,
+			Affiliations: affiliations,
+			Registry: lib.CAConfigRegistry{
+				MaxEnrollments: -1,
+				Identities:     []lib.CAConfigIdentity{id},
+			},
+			CSR: *csr,
+		},
+		TLS: getServerTls(),
+	}
+	return serverCfg
+}
+
+func defaultCSR() *api.CSRInfo {
 	csrName := csr.Name{
 		C:  "CN",
 		ST: "Guang Dong",
@@ -76,19 +95,9 @@ func getServerCfg() *lib.ServerConfig {
 		CN:    "fabric-ca-server",
 		Names: []csr.Name{csrName},
 		Hosts: []string{config.C.GetString("caserver.host")},
-	}
-	// set server config
-	serverCfg := &lib.ServerConfig{
-		CAcfg: lib.CAConfig{
-			DB:           db,
-			Affiliations: affiliations,
-			Registry: lib.CAConfigRegistry{
-				MaxEnrollments: -1,
-				Identities:     []lib.CAConfigIdentity{id},
-			},
-			CSR: csr,
+		KeyRequest: &api.KeyRequest{
+			ReuseKey: true,
 		},
-		TLS: getServerTls(),
 	}
-	return serverCfg
+	return &csr
 }

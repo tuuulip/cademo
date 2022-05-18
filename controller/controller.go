@@ -43,6 +43,22 @@ func (c *Controller) Enroll(ctx *gin.Context) {
 	ResponseSuccess(ctx, resp)
 }
 
+func (c *Controller) ReEnroll(ctx *gin.Context) {
+	req := &message.Enroll{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+
+	resp, err := caserver.ReEnroll(req)
+	if err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, resp)
+
+}
+
 func (c *Controller) EnrollTls(ctx *gin.Context) {
 	req := &message.Enroll{}
 	if err := ctx.ShouldBindJSON(req); err != nil {

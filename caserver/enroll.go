@@ -39,6 +39,27 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	return resp, err
 }
 
+func ReEnroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
+	home := filepath.Join(getHomeDir(), req.Type, req.User)
+	id, err := loadIdentity(home)
+	if err != nil {
+		return nil, err
+	}
+	cfg := id.GetClient().Config
+	enrollReq := &api.ReenrollmentRequest{
+		CSR: defaultCSR(),
+	}
+	resp, err := id.Reenroll(enrollReq)
+	if err := storeEnrollment(cfg, resp); err != nil {
+		return nil, err
+	}
+	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
+	if err := storeTlsCA(saveDir); err != nil {
+		return nil, err
+	}
+	return resp, err
+}
+
 func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	host := fmt.Sprintf("%s-%s", req.User, req.Org)
 	cfg := &lib.ClientConfig{

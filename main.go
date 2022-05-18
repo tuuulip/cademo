@@ -41,6 +41,7 @@ func main() {
 		v1.POST("/register", controller.Register)
 		v1.POST("/enroll", controller.Enroll)
 		v1.POST("/enrolltls", controller.EnrollTls)
+		v1.GET("/identities", controller.IdentityList)
 	}
 	port := config.C.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))

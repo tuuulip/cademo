@@ -2,6 +2,7 @@ package caserver
 
 import (
 	"cademo/config"
+	"encoding/json"
 	"fmt"
 
 	"github.com/hyperledger/fabric-ca/api"
@@ -9,19 +10,7 @@ import (
 )
 
 func Register(req *api.RegistrationRequest) (string, error) {
-	homeDir := getAdminDir()
-	caurl := getRegisterUrl()
-
-	clientCfg := &lib.ClientConfig{
-		URL: caurl,
-		TLS: getClientTls(),
-	}
-	client := lib.Client{
-		HomeDir: homeDir,
-		Config:  clientCfg,
-	}
-
-	id, err := client.LoadMyIdentity()
+	id, err := getAdminIdentity()
 	if err != nil {
 		return "", err
 	}
@@ -34,6 +23,43 @@ func Register(req *api.RegistrationRequest) (string, error) {
 	return resp.Secret, nil
 }
 
+// get all identities
+func GetAllIdentities() ([]api.IdentityInfo, error) {
+	id, err := getAdminIdentity()
+	if err != nil {
+		return nil, err
+	}
+	identities := []api.IdentityInfo{}
+	err = id.GetAllIdentities("", func(d *json.Decoder) error {
+		var id api.IdentityInfo
+		err := d.Decode(&id)
+		if err != nil {
+			return err
+		}
+		identities = append(identities, id)
+		return nil
+	})
+	return identities, err
+}
+
+// load admin identity
+func getAdminIdentity() (*lib.Identity, error) {
+	homeDir := getAdminDir()
+	caurl := getRegisterUrl()
+
+	clientCfg := &lib.ClientConfig{
+		URL: caurl,
+		TLS: getClientTls(),
+	}
+	client := lib.Client{
+		HomeDir: homeDir,
+		Config:  clientCfg,
+	}
+
+	return client.LoadMyIdentity()
+}
+
+// combine register url
 func getRegisterUrl() string {
 	proto := "http"
 	if config.C.GetBool("caserver.tls.enabled") {

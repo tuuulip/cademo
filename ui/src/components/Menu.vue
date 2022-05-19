@@ -53,6 +53,7 @@ export default {
 <style lang="postcss" scoped>
 .menu {
   background-color: #f3f6fb;
+  border: none;
 }
 
 .menu-item {

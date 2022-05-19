@@ -1,6 +1,19 @@
 <template>
   <div class="cert">
     <div class="cert-header">
+      <div class="cert-search">
+        <el-input placeholder="Please input id" v-model="search.id">
+          <template slot="prepend">Id</template>
+        </el-input>
+        <el-input
+          placeholder="Please input serialNumber"
+          v-model="search.serial"
+        >
+          <template slot="prepend">SerialNumber</template>
+        </el-input>
+        <el-button @click="reset">Reset</el-button>
+        <el-button type="primary" @click="fetchIdentities">Search</el-button>
+      </div>
       <el-button type="primary">Create Certificate</el-button>
     </div>
     <div class="cert-body">
@@ -31,7 +44,11 @@
 export default {
   data() {
     return {
-      certificates: []
+      certificates: [],
+      search: {
+        id: "",
+        serial: ""
+      }
     };
   },
   filters: {
@@ -45,11 +62,15 @@ export default {
   methods: {
     fetchIdentities() {
       this.$request
-        .post("/certificates", {})
+        .post("/certificates", this.search)
         .then(res => {
           this.certificates = res.data;
         })
         .catch(() => {});
+    },
+    reset() {
+      this.search = {};
+      return this.fetchIdentities();
     }
   }
 };
@@ -61,7 +82,7 @@ export default {
   height: 10vh;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -100,5 +121,9 @@ export default {
   font-size: 14px;
   white-space: pre;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
+}
+
+.cert-search {
+  display: flex;
 }
 </style>

@@ -6,10 +6,10 @@
           <template slot="prepend">Id</template>
         </el-input>
         <el-input
-          placeholder="Please input serialNumber"
+          placeholder="Please input serial"
           v-model="search.serial"
         >
-          <template slot="prepend">SerialNumber</template>
+          <template slot="prepend">Serial</template>
         </el-input>
         <el-button @click="reset">Reset</el-button>
         <el-button type="primary" @click="fetchIdentities">Search</el-button>
@@ -17,8 +17,7 @@
       <el-button type="primary">Create Certificate</el-button>
     </div>
     <div class="cert-body">
-      <h3 class="cert-title">Certificates</h3>
-      <el-table :data="certificates" border>
+      <el-table :data="certificates" border height="80vh">
         <el-table-column prop="id" label="id" />
         <el-table-column prop="serialNumber" label="serialNumber" />
         <el-table-column prop="pem" label="pem" width="230px">
@@ -33,8 +32,12 @@
             </el-popover>
           </div>
         </el-table-column>
-        <el-table-column prop="notBefore" label="notBefore" />
-        <el-table-column prop="notAfter" label="notAfter" />
+        <el-table-column prop="notBefore" label="not before" />
+        <el-table-column prop="notAfter" label="not after" />
+        <el-table-column label="operation">
+          <el-button type="text">reenroll</el-button>
+          <el-button type="text" class="cert-btn-del">delete</el-button>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -71,6 +74,9 @@ export default {
     reset() {
       this.search = {};
       return this.fetchIdentities();
+    },
+    onDateChange(){
+      console.log(this.dateRange)
     }
   }
 };
@@ -79,9 +85,9 @@ export default {
 <style lang="postcss" scoped>
 .cert-header {
   width: 100%;
-  height: 10vh;
+  height: 100px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding: 0 20px;
   box-sizing: border-box;
@@ -125,5 +131,14 @@ export default {
 
 .cert-search {
   display: flex;
+  justify-content: flex-start;
+}
+
+.cert-search .el-input {
+  margin-right: 10px;
+}
+
+.cert-btn-del {
+  color: red;
 }
 </style>

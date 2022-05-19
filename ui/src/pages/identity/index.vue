@@ -4,8 +4,7 @@
       <el-button type="primary">Create Identity</el-button>
     </div>
     <div class="iden-body">
-      <h3 class="iden-title">Identities</h3>
-      <el-table :data="identities" border>
+      <el-table :data="identities" border height="80vh">
         <el-table-column prop="id" label="id" />
         <el-table-column prop="type" label="type" />
         <el-table-column prop="affiliation" label="affiliation" />
@@ -60,9 +59,9 @@ export default {
 <style lang="postcss" scoped>
 .iden-header {
   width: 100%;
-  height: 10vh;
+  height: 100px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
   box-sizing: border-box;
@@ -94,5 +93,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.iden-btn-del {
+  color: red;
 }
 </style>

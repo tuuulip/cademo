@@ -32,8 +32,8 @@
         <el-table-column prop="notBefore" label="not before" />
         <el-table-column prop="notAfter" label="not after" />
         <el-table-column label="operation">
-          <el-button type="text">reenroll</el-button>
-          <el-button type="text" class="cert-btn-del">delete</el-button>
+          <el-button type="text">Reenroll</el-button>
+          <el-button type="text" class="cert-btn-del">Delete</el-button>
         </el-table-column>
       </el-table>
     </div>

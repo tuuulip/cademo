@@ -23,6 +23,14 @@
             </el-popover>
           </div>
         </el-table-column>
+        <el-table-column label="operation">
+          <template>
+            <div>
+              <el-button type="text">Edit</el-button>
+              <el-button type="text" class="iden-btn-del">Delete</el-button>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -81,12 +89,6 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-}
-
-.iden-attr-icon {
-  font-size: 18px;
-  cursor: pointer;
-  color: #409eff;
 }
 
 .iden-column-attr {

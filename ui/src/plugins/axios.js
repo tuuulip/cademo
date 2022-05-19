@@ -1,5 +1,6 @@
 import axios from "axios";
 import Vue from "vue";
+import { Notification } from "element-ui";
 
 // create an axios instance
 const instance = axios.create({

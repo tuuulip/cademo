@@ -3,10 +3,13 @@ package controller
 import (
 	"cademo/caserver"
 	"cademo/message"
+	"crypto/x509"
 
+	"github.com/cloudflare/cfssl/helpers"
 	"github.com/gin-gonic/gin"
 	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
+	"github.com/hyperledger/fabric-ca/util"
 )
 
 type Controller struct {
@@ -109,5 +112,22 @@ func (c *Controller) CertificateList(ctx *gin.Context) {
 		ResponseFail(ctx, err.Error())
 		return
 	}
-	ResponseSuccess(ctx, certs)
+	msgCerts := []message.Certificate{}
+	for _, cert := range certs {
+		msgCert := c.parseCertificate(&cert)
+		msgCerts = append(msgCerts, *msgCert)
+	}
+	ResponseSuccess(ctx, msgCerts)
+}
+
+func (c *Controller) parseCertificate(raw *x509.Certificate) *message.Certificate {
+	pem := helpers.EncodeCertificatePEM(raw)
+	cert := &message.Certificate{
+		Id:           raw.Subject.CommonName,
+		SerialNumber: util.GetSerialAsHex(raw.SerialNumber),
+		Pem:          string(pem),
+		NotBefore:    raw.NotBefore,
+		NotAfter:     raw.NotAfter,
+	}
+	return cert
 }

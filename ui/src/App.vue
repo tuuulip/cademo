@@ -12,7 +12,8 @@
   text-align: center;
   color: #2c3e50;
 }
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
 }

@@ -6,15 +6,14 @@
     <div class="mid">
       <router-view />
     </div>
-    <div class="right"></div>
   </div>
 </template>
 
 <script>
-import Menu from '@/components/Menu.vue'
+import Menu from "@/components/Menu.vue";
 export default {
-  components: {Menu}, 
-}
+  components: { Menu }
+};
 </script>
 
 <style lang="postcss" scoped>
@@ -27,12 +26,8 @@ export default {
   flex: 1;
 }
 
-.right {
-  flex: 1;
-}
-
 .mid {
-  flex: 3;
+  flex: 4;
   border: 1px solid #ccc;
 }
 </style>

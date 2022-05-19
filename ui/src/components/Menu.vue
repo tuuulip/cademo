@@ -12,19 +12,19 @@ export default {
   data() {
     return {
       defaultActive: "1"
-    }
+    };
   },
   methods: {
-    onSelect(index){
+    onSelect(index) {
       switch (index) {
         case "identity":
-          this.$router.push("/identity").catch(()=>{})
-          break
+          this.$router.push("/identity").catch(() => {});
+          break;
         case "certificate":
-          this.$router.push("/certificate").catch(()=>{})
-          break
+          this.$router.push("/certificate").catch(() => {});
+          break;
       }
     }
-  },
-}
+  }
+};
 </script>

@@ -1,5 +1,38 @@
 <template>
-  <div>
-    <router-view />
+  <div class="default">
+    <div class="left">
+      <Menu />
+    </div>
+    <div class="mid">
+      <router-view />
+    </div>
+    <div class="right"></div>
   </div>
 </template>
+
+<script>
+import Menu from '@/components/Menu.vue'
+export default {
+  components: {Menu}, 
+}
+</script>
+
+<style lang="postcss" scoped>
+.default {
+  display: flex;
+  min-height: 99vh;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  flex: 1;
+}
+
+.mid {
+  flex: 3;
+  border: 1px solid #ccc;
+}
+</style>

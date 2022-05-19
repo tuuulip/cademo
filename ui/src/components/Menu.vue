@@ -28,6 +28,11 @@ export default {
           index: "certificate",
           icon: "el-icon-bank-card",
           title: "Certificate"
+        },
+        {
+          index: "affiliation",
+          icon: "el-icon-office-building",
+          title: "Affiliation"
         }
       ]
     };
@@ -43,6 +48,9 @@ export default {
           break;
         case "certificate":
           this.$router.push("/certificate").catch(() => {});
+          break;
+        case "affiliation":
+          this.$router.push("/affiliation").catch(() => {});
           break;
       }
     }

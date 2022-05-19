@@ -16,7 +16,7 @@
     <div class="cert-body">
       <el-table :data="certificates" border height="80vh" class="cert-table">
         <el-table-column prop="id" label="id" width="100px" />
-        <el-table-column prop="serialNumber" label="serialNumber" />
+        <el-table-column prop="serialNumber" label="serial number" />
         <el-table-column prop="pem" label="pem" width="230px">
           <div slot-scope="{ row }" class="cert-column-attr">
             <span class="cert-attr">{{ row.pem }}</span>

@@ -7,6 +7,26 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      affiliationInfo: {}
+    };
+  },
+  created() {
+    this.getAllAffiliations();
+  },
+  methods: {
+    getAllAffiliations() {
+      this.$request.get("/affiliations").then(res => {
+        this.affiliations = res.data;
+      });
+    }
+  }
+};
+</script>
+
 <style lang="postcss" scoped>
 .aff {
   text-align: left;

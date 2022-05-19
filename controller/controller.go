@@ -131,3 +131,12 @@ func (c *Controller) parseCertificate(raw *x509.Certificate) *message.Certificat
 	}
 	return cert
 }
+
+func (c *Controller) AllAffiliations(ctx *gin.Context) {
+	info, err := caserver.AllAffiliations()
+	if err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, info)
+}

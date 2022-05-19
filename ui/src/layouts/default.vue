@@ -36,6 +36,7 @@ export default {
 }
 
 .mid {
-  flex: 4;
+  flex: 5;
+  flex-shrink: 1;
 }
 </style>

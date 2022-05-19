@@ -5,10 +5,7 @@
         <el-input placeholder="Please input id" v-model="search.id">
           <template slot="prepend">Id</template>
         </el-input>
-        <el-input
-          placeholder="Please input serial"
-          v-model="search.serial"
-        >
+        <el-input placeholder="Please input serial" v-model="search.serial">
           <template slot="prepend">Serial</template>
         </el-input>
         <el-button @click="reset">Reset</el-button>
@@ -17,8 +14,8 @@
       <el-button type="primary">Create Certificate</el-button>
     </div>
     <div class="cert-body">
-      <el-table :data="certificates" border height="80vh">
-        <el-table-column prop="id" label="id" />
+      <el-table :data="certificates" border height="80vh" class="cert-table">
+        <el-table-column prop="id" label="id" width="100px" />
         <el-table-column prop="serialNumber" label="serialNumber" />
         <el-table-column prop="pem" label="pem" width="230px">
           <div slot-scope="{ row }" class="cert-column-attr">
@@ -75,8 +72,8 @@ export default {
       this.search = {};
       return this.fetchIdentities();
     },
-    onDateChange(){
-      console.log(this.dateRange)
+    onDateChange() {
+      console.log(this.dateRange);
     }
   }
 };
@@ -100,6 +97,10 @@ export default {
 
 .cert-title {
   text-align: left;
+}
+
+.cert-table {
+  width: 99%;
 }
 
 .cert-attr {

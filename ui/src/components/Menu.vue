@@ -1,8 +1,18 @@
 <template>
-  <div class="menu">
-    <el-menu :default-active="defaultActive" @select="onSelect">
-      <el-menu-item index="identity">Identity</el-menu-item>
-      <el-menu-item index="certificate">Certificate</el-menu-item>
+  <div class="menu-container">
+    <el-menu class="menu" :default-active="defaultActive" @select="onSelect">
+      <el-menu-item
+        v-for="(item, i) in menuItems"
+        :key="i"
+        :index="item.index"
+        class="menu-item"
+        :class="active(item.index) ? 'menu-item-active' : ''"
+      >
+        <template slot="title">
+          <i :class="item.icon"></i>
+          <span>{{ item.title }}</span>
+        </template>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -11,10 +21,21 @@
 export default {
   data() {
     return {
-      defaultActive: "1"
+      defaultActive: "1",
+      menuItems: [
+        { index: "identity", icon: "el-icon-user", title: "Identity" },
+        {
+          index: "certificate",
+          icon: "el-icon-bank-card",
+          title: "Certificate"
+        }
+      ]
     };
   },
   methods: {
+    active(index) {
+      return this.$route.path.includes(index)
+    },
     onSelect(index) {
       switch (index) {
         case "identity":
@@ -28,3 +49,19 @@ export default {
   }
 };
 </script>
+
+<style lang="postcss" scoped>
+.menu {
+  background-color: #F3F6FB;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-active {
+  background-color: #fff;
+  font-weight: bold;
+}
+</style>

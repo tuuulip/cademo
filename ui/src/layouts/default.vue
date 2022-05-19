@@ -1,33 +1,41 @@
 <template>
-  <div class="default">
-    <div class="left">
-      <Menu />
-    </div>
-    <div class="mid">
-      <router-view />
+  <div class="layout">
+    <div class="layout-body">
+      <div class="left">
+        <Header />
+        <Menu />
+      </div>
+      <div class="mid">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Menu from "@/components/Menu.vue";
+import Header from "@/components/Header.vue";
 export default {
-  components: { Menu }
+  components: { Header, Menu }
 };
 </script>
 
 <style lang="postcss" scoped>
-.default {
-  display: flex;
+.layout {
   min-height: 99vh;
+}
+
+.layout-body {
+  display: flex;
 }
 
 .left {
   flex: 1;
+  min-height: 100vh;
+  background-color: #F3F6FB;
 }
 
 .mid {
   flex: 4;
-  border: 1px solid #ccc;
 }
 </style>

@@ -3,4 +3,4 @@ import Element from "element-ui";
 import "../element-variables.scss";
 import locale from "element-ui/lib/locale/lang/en";
 
-Vue.use(Element, { locale });
+Vue.use(Element, { locale, size: "small" });

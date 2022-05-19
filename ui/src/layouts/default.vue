@@ -32,7 +32,7 @@ export default {
 .left {
   flex: 1;
   min-height: 100vh;
-  background-color: #F3F6FB;
+  background-color: #f3f6fb;
 }
 
 .mid {

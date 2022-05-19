@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     active(index) {
-      return this.$route.path.includes(index)
+      return this.$route.path.includes(index);
     },
     onSelect(index) {
       switch (index) {
@@ -52,7 +52,7 @@ export default {
 
 <style lang="postcss" scoped>
 .menu {
-  background-color: #F3F6FB;
+  background-color: #f3f6fb;
 }
 
 .menu-item {

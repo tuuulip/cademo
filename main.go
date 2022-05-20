@@ -38,13 +38,18 @@ func main() {
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/cainfo", controller.CaInfo)
-		v1.POST("/register", controller.Register)
-		v1.POST("/enroll", controller.Enroll)
-		v1.POST("/reenroll", controller.ReEnroll)
-		v1.POST("/enrolltls", controller.EnrollTls)
-		v1.GET("/identities", controller.AllIdentities)
-		v1.POST("/certificates", controller.CertificateList)
-		v1.GET("/affiliations", controller.AllAffiliations)
+		// identity api
+		v1.POST("/id/register", controller.Register)
+		v1.GET("/id/all", controller.AllIdentities)
+
+		// certificate api
+		v1.POST("/cert/enroll", controller.Enroll)
+		v1.POST("/cert/reenroll", controller.ReEnroll)
+		v1.POST("/cert/enrolltls", controller.EnrollTls)
+		v1.POST("/cert/list", controller.CertificateList)
+
+		// affiliation api
+		v1.GET("/affi/all", controller.AllAffiliations)
 	}
 	port := config.C.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))

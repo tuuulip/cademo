@@ -58,7 +58,7 @@ export default {
   methods: {
     fetchIdentities() {
       this.$request
-        .get("/identities")
+        .get("/id/all")
         .then(res => {
           this.identities = res.data;
         })
@@ -72,7 +72,7 @@ export default {
     },
     addIdentity(postData) {
       this.$request
-        .post("/register", postData)
+        .post("/id/register", postData)
         .then(() => {
           this.hideDialog();
           return this.fetchIdentities();

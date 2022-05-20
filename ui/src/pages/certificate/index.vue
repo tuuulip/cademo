@@ -62,7 +62,7 @@ export default {
   methods: {
     fetchIdentities() {
       this.$request
-        .post("/certificates", this.search)
+        .post("/cert/list", this.search)
         .then(res => {
           this.certificates = res.data;
         })

@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     getAllAffiliations() {
-      this.$request.get("/affiliations").then(res => {
+      this.$request.get("/affi/all").then(res => {
         this.affiliationInfo = res.data;
       });
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="iden">
     <div class="iden-header">
-      <el-button type="primary">Create Identity</el-button>
+      <el-button type="primary" @click="showDialog">Add Identity</el-button>
     </div>
     <div class="iden-body">
       <el-table :data="identities" border height="80vh">
@@ -33,11 +33,15 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- dialogs -->
+    <Add ref="addDialog" @addIdentity="addIdentity" />
   </div>
 </template>
 
 <script>
+import Add from "./__Add__.vue";
 export default {
+  components: { Add },
   data() {
     return {
       identities: []
@@ -57,6 +61,21 @@ export default {
         .get("/identities")
         .then(res => {
           this.identities = res.data;
+        })
+        .catch(() => {});
+    },
+    showDialog() {
+      this.$refs["addDialog"].show();
+    },
+    hideDialog() {
+      this.$refs["addDialog"].hide();
+    },
+    addIdentity(postData) {
+      this.$request
+        .post("/register", postData)
+        .then(() => {
+          this.hideDialog();
+          return this.fetchIdentities();
         })
         .catch(() => {});
     }

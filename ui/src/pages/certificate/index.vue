@@ -11,7 +11,7 @@
         <el-button @click="reset">Reset</el-button>
         <el-button type="primary" @click="fetchIdentities">Search</el-button>
       </div>
-      <el-button type="primary">Create Certificate</el-button>
+      <el-button type="primary">Enroll</el-button>
     </div>
     <div class="cert-body">
       <el-table :data="certificates" border height="80vh" class="cert-table">

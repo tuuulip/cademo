@@ -50,6 +50,7 @@ func main() {
 		v1.POST("/cert/reenroll", controller.ReEnroll)
 		v1.POST("/cert/enrolltls", controller.EnrollTls)
 		v1.POST("/cert/list", controller.CertificateList)
+		v1.POST("/cert/del", controller.DeleteCertificate)
 
 		// affiliation api
 		v1.GET("/affi/all", controller.AllAffiliations)

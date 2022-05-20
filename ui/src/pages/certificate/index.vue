@@ -33,8 +33,15 @@
         <el-table-column prop="notBefore" label="not before" />
         <el-table-column prop="notAfter" label="not after" />
         <el-table-column label="operation">
-          <el-button type="text">Reenroll</el-button>
-          <el-button type="text" class="cert-btn-del">Delete</el-button>
+          <template slot-scope="{ row }">
+            <el-button type="text">Reenroll</el-button>
+            <el-button
+              type="text"
+              class="cert-btn-del"
+              @click="deleteCertificate(row)"
+              >Delete</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -94,6 +101,14 @@ export default {
     },
     onDateChange() {
       console.log(this.dateRange);
+    },
+    deleteCertificate(row) {
+      this.$request
+        .post("/cert/del", row)
+        .then(() => {
+          this.fetchCertificates();
+        })
+        .catch(() => {});
     }
   }
 };

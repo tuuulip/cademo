@@ -154,6 +154,21 @@ func (c *Controller) CertificateList(ctx *gin.Context) {
 	ResponseSuccess(ctx, msgCerts)
 }
 
+func (c *Controller) DeleteCertificate(ctx *gin.Context) {
+	req := &db.Certificates{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+
+	if err := c.dbClinet.DeleteCertificate(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+
+	ResponseSuccess(ctx, "ok")
+}
+
 func (c *Controller) parseCertificate(raw *x509.Certificate) *message.Certificate {
 	pem := helpers.EncodeCertificatePEM(raw)
 	cert := &message.Certificate{

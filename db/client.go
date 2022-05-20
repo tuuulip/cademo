@@ -36,3 +36,8 @@ func (d *DBClient) QueryIdentityStates() ([]Users, error) {
 	err := d.engine.Find(&users)
 	return users, err
 }
+
+func (d *DBClient) DeleteCertificate(cert *Certificates) error {
+	_, err := d.engine.Delete(cert)
+	return err
+}

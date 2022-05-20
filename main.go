@@ -41,6 +41,7 @@ func main() {
 		// identity api
 		v1.POST("/id/register", controller.Register)
 		v1.GET("/id/all", controller.AllIdentities)
+		v1.POST("/id/del", controller.DeleteIdentity)
 
 		// certificate api
 		v1.POST("/cert/enroll", controller.Enroll)

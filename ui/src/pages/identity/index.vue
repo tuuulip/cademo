@@ -24,10 +24,15 @@
           </div>
         </el-table-column>
         <el-table-column label="operation">
-          <template>
+          <template slot-scope="{ row }">
             <div>
               <el-button type="text">Edit</el-button>
-              <el-button type="text" class="iden-btn-del">Delete</el-button>
+              <el-button
+                type="text"
+                class="iden-btn-del"
+                @click="deleteIdentity(row.id)"
+                >Delete</el-button
+              >
             </div>
           </template>
         </el-table-column>
@@ -75,6 +80,14 @@ export default {
         .post("/id/register", postData)
         .then(() => {
           this.hideDialog();
+          return this.fetchIdentities();
+        })
+        .catch(() => {});
+    },
+    deleteIdentity(id) {
+      this.$request
+        .post("/id/del", { id })
+        .then(() => {
           return this.fetchIdentities();
         })
         .catch(() => {});

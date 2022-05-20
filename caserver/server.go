@@ -65,8 +65,8 @@ func getServerCfg() *lib.ServerConfig {
 		"org2": []string{"department1", "department2"},
 	}
 	// set csr info
-
 	csr := defaultCSR()
+
 	// set server config
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
@@ -80,6 +80,7 @@ func getServerCfg() *lib.ServerConfig {
 		},
 		TLS: getServerTls(),
 	}
+	serverCfg.CAcfg.Cfg.Identities.AllowRemove = true
 	return serverCfg
 }
 

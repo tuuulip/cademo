@@ -42,6 +42,15 @@ func GetAllIdentities() ([]api.IdentityInfo, error) {
 	return identities, err
 }
 
+func DeleteIdentity(req *api.RemoveIdentityRequest) error {
+	id, err := getAdminIdentity()
+	if err != nil {
+		return err
+	}
+	_, err = id.RemoveIdentity(req)
+	return err
+}
+
 // load admin identity
 func getAdminIdentity() (*lib.Identity, error) {
 	homeDir := getAdminDir()

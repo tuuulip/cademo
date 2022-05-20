@@ -5,6 +5,7 @@ import (
 	"cademo/db"
 	"cademo/message"
 	"crypto/x509"
+	"encoding/hex"
 
 	"github.com/cloudflare/cfssl/helpers"
 	"github.com/gin-gonic/gin"
@@ -156,11 +157,12 @@ func (c *Controller) CertificateList(ctx *gin.Context) {
 func (c *Controller) parseCertificate(raw *x509.Certificate) *message.Certificate {
 	pem := helpers.EncodeCertificatePEM(raw)
 	cert := &message.Certificate{
-		Id:           raw.Subject.CommonName,
-		SerialNumber: util.GetSerialAsHex(raw.SerialNumber),
-		Pem:          string(pem),
-		NotBefore:    raw.NotBefore,
-		NotAfter:     raw.NotAfter,
+		Id:             raw.Subject.CommonName,
+		AuthorityKeyId: hex.EncodeToString(raw.AuthorityKeyId),
+		SerialNumber:   util.GetSerialAsHex(raw.SerialNumber),
+		Pem:            string(pem),
+		NotBefore:      raw.NotBefore,
+		NotAfter:       raw.NotAfter,
 	}
 	return cert
 }

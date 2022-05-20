@@ -27,6 +27,7 @@
           <template slot-scope="{ row }">
             <div>
               <el-button type="text">Edit</el-button>
+              <el-button type="text" @click="revokeIdentity(row.id)">Revoke</el-button>
               <el-button
                 type="text"
                 class="iden-btn-del"
@@ -87,6 +88,14 @@ export default {
     deleteIdentity(id) {
       this.$request
         .post("/id/del", { id })
+        .then(() => {
+          return this.fetchIdentities();
+        })
+        .catch(() => {});
+    },
+    revokeIdentity(id) {
+      this.$request
+        .post("/id/revoke", { id })
         .then(() => {
           return this.fetchIdentities();
         })

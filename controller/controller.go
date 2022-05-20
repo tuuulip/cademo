@@ -113,6 +113,19 @@ func (c *Controller) DeleteIdentity(ctx *gin.Context) {
 	ResponseSuccess(ctx, "ok")
 }
 
+func (c *Controller) RevokeIdentity(ctx *gin.Context) {
+	req := &api.RevocationRequest{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	if err := caserver.RevokeIdentity(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, "ok")
+}
+
 func (c *Controller) CertificateList(ctx *gin.Context) {
 	req := &api.GetCertificatesRequest{}
 	if err := ctx.ShouldBindJSON(req); err != nil {

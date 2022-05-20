@@ -6,6 +6,11 @@
     <div class="iden-body">
       <el-table :data="identities" border height="80vh">
         <el-table-column prop="id" label="id" />
+        <el-table-column prop="state" label="state">
+          <template slot-scope="{ row }">
+            <span>{{ row.id | stateName(stateMap) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="type" label="type" />
         <el-table-column prop="affiliation" label="affiliation" />
         <el-table-column prop="max_enrollments" label="max_enrollments" />
@@ -23,7 +28,7 @@
             </el-popover>
           </div>
         </el-table-column>
-        <el-table-column label="operation">
+        <el-table-column label="operation" width="160">
           <template slot-scope="{ row }">
             <div>
               <el-button type="text">Edit</el-button>
@@ -52,16 +57,27 @@ export default {
   components: { Add },
   data() {
     return {
-      identities: []
+      identities: [],
+      states: [],
+      stateMap: {}
     };
   },
   filters: {
     attrJson(obj) {
       return JSON.stringify(obj);
+    },
+    stateName(id, stateMap) {
+      const state = stateMap[id];
+      switch (state) {
+        case "-1":
+          return `Revoked (${state})`;
+        default:
+          return `Valid (${state})`;
+      }
     }
   },
   created() {
-    this.fetchIdentities();
+    Promise.all([this.fetchIdentities(), this.fetchStates()]);
   },
   methods: {
     fetchIdentities() {
@@ -71,6 +87,21 @@ export default {
           this.identities = res.data;
         })
         .catch(() => {});
+    },
+    fetchStates() {
+      this.$request
+        .get("/id/state")
+        .then(res => {
+          this.states = res.data;
+          this.updateStateMap();
+        })
+        .catch(() => {});
+    },
+    updateStateMap() {
+      this.stateMap = {};
+      this.states.forEach(element => {
+        this.stateMap[element.id] = element.state;
+      });
     },
     showDialog() {
       this.$refs["addDialog"].show();

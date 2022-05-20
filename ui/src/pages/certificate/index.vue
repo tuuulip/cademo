@@ -9,9 +9,9 @@
           <template slot="prepend">Serial</template>
         </el-input>
         <el-button @click="reset">Reset</el-button>
-        <el-button type="primary" @click="fetchIdentities">Search</el-button>
+        <el-button type="primary" @click="fetchCertificates">Search</el-button>
       </div>
-      <el-button type="primary">Enroll</el-button>
+      <el-button type="primary" @click="showEnroll">Enroll</el-button>
     </div>
     <div class="cert-body">
       <el-table :data="certificates" border height="80vh" class="cert-table">
@@ -37,11 +37,15 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- enroll dialog -->
+    <Enroll ref="enroll" @enroll="requestEnroll" />
   </div>
 </template>
 
 <script>
+import Enroll from "./__Enroll_.vue";
 export default {
+  components: { Enroll },
   data() {
     return {
       certificates: [],
@@ -57,10 +61,10 @@ export default {
     }
   },
   created() {
-    this.fetchIdentities();
+    this.fetchCertificates();
   },
   methods: {
-    fetchIdentities() {
+    fetchCertificates() {
       this.$request
         .post("/cert/list", this.search)
         .then(res => {
@@ -68,9 +72,24 @@ export default {
         })
         .catch(() => {});
     },
+    requestEnroll(postData) {
+      this.$request
+        .post("/cert/enroll", postData)
+        .then(() => {
+          this.hideEnroll();
+          return this.fetchCertificates();
+        })
+        .catch(() => {});
+    },
+    showEnroll() {
+      this.$refs["enroll"].show();
+    },
+    hideEnroll() {
+      this.$refs["enroll"].hide();
+    },
     reset() {
       this.search = {};
-      return this.fetchIdentities();
+      return this.fetchCertificates();
     },
     onDateChange() {
       console.log(this.dateRange);

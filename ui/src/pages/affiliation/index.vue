@@ -2,7 +2,12 @@
   <div class="aff">
     <div class="aff-header"></div>
     <div class="aff-body">
-      affiliation
+      <el-tree
+        :data="affiliationInfo.affiliations"
+        :props="props"
+        @node-click="handleNodeClick"
+        default-expand-all
+      ></el-tree>
     </div>
   </div>
 </template>
@@ -11,6 +16,10 @@
 export default {
   data() {
     return {
+      props: {
+        label: "name",
+        children: "affiliations"
+      },
       affiliationInfo: {}
     };
   },
@@ -20,9 +29,10 @@ export default {
   methods: {
     getAllAffiliations() {
       this.$request.get("/affiliations").then(res => {
-        this.affiliations = res.data;
+        this.affiliationInfo = res.data;
       });
-    }
+    },
+    handleNodeClick() {}
   }
 };
 </script>

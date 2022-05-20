@@ -2,6 +2,7 @@ package controller
 
 import (
 	"cademo/caserver"
+	"cademo/db"
 	"cademo/message"
 	"crypto/x509"
 
@@ -14,11 +15,17 @@ import (
 
 type Controller struct {
 	caServer *lib.Server
+	dbClinet *db.DBClient
 }
 
 func NewController(caServer *lib.Server) *Controller {
+	dbClinet, err := db.NewDBClient()
+	if err != nil {
+		panic(err)
+	}
 	return &Controller{
 		caServer: caServer,
+		dbClinet: dbClinet,
 	}
 }
 
@@ -165,4 +172,13 @@ func (c *Controller) AllAffiliations(ctx *gin.Context) {
 		return
 	}
 	ResponseSuccess(ctx, info)
+}
+
+func (c *Controller) GetUserState(ctx *gin.Context) {
+	states, err := c.dbClinet.QueryIdentityStates()
+	if err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, states)
 }

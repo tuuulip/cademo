@@ -31,8 +31,9 @@ func GetServer() *lib.Server {
 
 func getServerCfg() *lib.ServerConfig {
 	dbsrc := fmt.Sprintf(
-		"host=%s port=5432 user=%s password=%s dbname=%s sslmode=%s",
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		config.C.GetString("cadb.host"),
+		config.C.GetInt("cadb.port"),
 		config.C.GetString("cadb.user"),
 		config.C.GetString("cadb.password"),
 		config.C.GetString("cadb.dbname"),

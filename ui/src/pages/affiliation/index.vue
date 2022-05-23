@@ -1,7 +1,7 @@
 <template>
   <div class="aff">
     <div class="aff-header">
-      <el-button type="primary" @click="showDialog">Add</el-button>
+      <el-button type="primary" @click="showDialog">Add Affiliation</el-button>
     </div>
     <div class="aff-body">
       <el-table :data="affilliationList" border>

@@ -34,6 +34,15 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	if err := storeTlsCA(saveDir); err != nil {
 		return nil, err
 	}
+	if identity.Type == "peer" || identity.Type == "orderer" {
+		_, err := EnrollTLS(req)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if err := storeTlsCA(saveDir); err != nil {
+		return nil, err
+	}
 	return resp, err
 }
 
@@ -72,7 +81,7 @@ func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	host := fmt.Sprintf("%s-%s", req.User, identity.Affiliation)
 	cfg := &lib.ClientConfig{
 		TLS:    getClientTls(),
-		MSPDir: "tls-msp",
+		MSPDir: "tls",
 		Enrollment: api.EnrollmentRequest{
 			Profile: "tls",
 		},

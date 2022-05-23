@@ -205,6 +205,20 @@ func (c *Controller) AddAffiliation(ctx *gin.Context) {
 
 }
 
+func (c *Controller) DelAffiliation(ctx *gin.Context) {
+	req := &api.RemoveAffiliationRequest{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	if err := caserver.DeleteAffiliation(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, "ok")
+
+}
+
 func (c *Controller) GetUserState(ctx *gin.Context) {
 	states, err := c.dbClinet.QueryIdentityStates()
 	if err != nil {

@@ -23,3 +23,13 @@ func AddAffiliation(req *api.AddAffiliationRequest) error {
 	_, err = admin.AddAffiliation(req)
 	return err
 }
+
+// delete affiliation
+func DeleteAffiliation(req *api.RemoveAffiliationRequest) error {
+	admin, err := getAdminIdentity()
+	if err != nil {
+		return err
+	}
+	_, err = admin.RemoveAffiliation(req)
+	return err
+}

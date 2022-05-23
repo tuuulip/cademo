@@ -7,8 +7,13 @@
       <el-table :data="affilliationList" border>
         <el-table-column prop="name" label="name"></el-table-column>
         <el-table-column label="operation">
-          <template>
-            <el-button type="text" class="aff-del">delete</el-button>
+          <template slot-scope="{ row }">
+            <el-button
+              type="text"
+              class="aff-del"
+              @click="delAffiliation(row.name)"
+              >delete</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -66,6 +71,18 @@ export default {
             type: "success"
           });
           return this.getAllAffiliations();
+        })
+        .catch(() => {});
+    },
+    delAffiliation(name) {
+      this.$request
+        .post("/affi/del", { name })
+        .then(() => {
+          this.$notify({
+            title: "success",
+            message: "Delete affiliation success.",
+            type: "success"
+          });
         })
         .catch(() => {});
     }

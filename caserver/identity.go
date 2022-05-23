@@ -15,6 +15,7 @@ func Register(req *api.RegistrationRequest) (string, error) {
 		return "", err
 	}
 
+	req.Secret = defaultIdentityPassword(req.Name)
 	resp, err := id.Register(req)
 	if err != nil {
 		return "", err
@@ -107,4 +108,9 @@ func getRegisterUrl() string {
 		config.C.GetString("caserver.host"),
 		config.C.GetInt("caserver.port"),
 	)
+}
+
+// generate default identity password
+func defaultIdentityPassword(identity string) string {
+	return identity + "pw"
 }

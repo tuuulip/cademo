@@ -12,12 +12,12 @@ import (
 )
 
 func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
-	csr := clientCSR(req.Organization, req.Domain)
+	csr := clientCSR(req.Organization, req.User, req.Type)
 	cfg := &lib.ClientConfig{
 		CSR: *csr,
 		TLS: getClientTls(),
 	}
-	enrollUrl := getEnrollUrl(req.User, req.Password)
+	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))
 	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
 	if err != nil {
@@ -39,7 +39,7 @@ func ReEnroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 		return nil, err
 	}
 	cfg := id.GetClient().Config
-	csr := clientCSR(req.Organization, req.Domain)
+	csr := clientCSR(req.Organization, req.User, req.Type)
 	enrollReq := &api.ReenrollmentRequest{
 		CSR: csr,
 	}
@@ -66,7 +66,7 @@ func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 			Hosts: []string{host},
 		},
 	}
-	enrollUrl := getEnrollUrl(req.User, req.Password)
+	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))
 	saveDir := filepath.Join(getHomeDir(), req.Type, req.User)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
 	if err != nil {

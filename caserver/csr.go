@@ -25,19 +25,19 @@ func serverCSR() *api.CSRInfo {
 	return &csr
 }
 
-func clientCSR(organization, domain string) *api.CSRInfo {
+func clientCSR(organization, identity, identityType string) *api.CSRInfo {
 	csrName := csr.Name{
 		C:  "CN",
 		ST: "Guang Dong",
 		L:  "Guang Zhou",
 		O:  organization,
+		OU: identityType,
 	}
 	hosts := []string{
-		domain,
 		config.C.GetString("caserver.host"),
 	}
 	csr := api.CSRInfo{
-		CN:    domain,
+		CN:    identity,
 		Names: []csr.Name{csrName},
 		Hosts: hosts,
 		KeyRequest: &api.KeyRequest{

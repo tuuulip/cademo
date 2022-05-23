@@ -8,36 +8,24 @@
   >
     <el-form class="enroll-form" ref="form" :model="form" label-width="80px">
       <el-form-item prop="user" label="ID">
-        <el-input v-model="form.user" placeholder="Please input id"></el-input>
-      </el-form-item>
-      <el-form-item prop="password" label="Secret">
-        <el-input
-          show-password
-          v-model="form.password"
-          placeholder="Please input password"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="type" label="Type">
-        <el-select v-model="form.type" placeholder="Please select type">
+        <el-select
+          v-model="form.user"
+          placeholder="Please select identity"
+          @change="onChange"
+        >
           <el-option
-            v-for="item in typeOptions"
-            :key="item"
-            :label="item"
-            :value="item"
-          >
-          </el-option>
+            v-for="item in identities"
+            :key="item.id"
+            :label="item.id"
+            :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item prop="organization" label="Organ">
         <el-input
+          readonly
           v-model="form.organization"
-          placeholder="Please input organization"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="domain" label="Domain">
-        <el-input
-          v-model="form.domain"
-          placeholder="Please input domain"
+          placeholder="Please select organization"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -53,20 +41,45 @@ export default {
   props: ["enroll"],
   data() {
     return {
+      identities: [],
+      states: [],
+      stateMap: {},
       dialogVisible: false,
       typeOptions: ["client", "orderer", "peer", "user"],
       form: {
         user: "",
-        password: "",
-        organization: "",
-        domain: "",
-        type: ""
+        organization: ""
       }
     };
   },
   methods: {
+    fetchIdentities() {
+      this.$request
+        .get("/id/all")
+        .then(res => {
+          this.identities = res.data;
+        })
+        .catch(() => {});
+    },
+    fetchStates() {
+      this.$request
+        .get("/id/state")
+        .then(res => {
+          this.states = res.data;
+          this.updateStateMap();
+        })
+        .catch(() => {});
+    },
+    updateStateMap() {
+      this.stateMap = {};
+      this.states.forEach(element => {
+        this.stateMap[element.id] = element.state;
+      });
+    },
     show() {
-      this.dialogVisible = true;
+      Promise.all([this.fetchIdentities(), this.fetchStates()]).then(() => {
+        this.dialogVisible = true;
+      });
     },
     hide() {
       this.beforeClose();
@@ -76,7 +89,30 @@ export default {
       this.$refs["form"].resetFields();
     },
     onConfirm() {
-      this.$emit("enroll", this.form);
+      if (this.form.user === "") {
+        this.$message.warning("Please select identity.");
+        return;
+      }
+      const count = this.stateMap[this.form.user];
+      if (count && count > 0) {
+        const content = `This identity already enrolled, after the operation, 
+        the old one will be covered, please make a backup and continue! `;
+        this.$confirm(content, "Warning")
+          .then(() => {
+            this.$emit("enroll", this.form);
+          })
+          .catch(() => {});
+      } else {
+        this.$emit("enroll", this.form);
+      }
+    },
+    onChange() {
+      const matchers = this.identities.filter(e => {
+        return e.id === this.form.user;
+      });
+      if (matchers.length > 0) {
+        this.form.organization = matchers[0].affiliation;
+      }
     }
   }
 };

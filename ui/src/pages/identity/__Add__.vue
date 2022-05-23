@@ -10,13 +10,6 @@
       <el-form-item prop="id" label="ID">
         <el-input v-model="form.id" placeholder="Please input id"></el-input>
       </el-form-item>
-      <el-form-item prop="secret" label="Secret">
-        <el-input
-          show-password
-          v-model="form.secret"
-          placeholder="Please input secret"
-        ></el-input>
-      </el-form-item>
       <el-form-item prop="type" label="Type">
         <el-select v-model="form.type" placeholder="Please select type">
           <el-option
@@ -50,7 +43,6 @@ export default {
       dialogVisible: false,
       form: {
         id: "",
-        secret: "",
         type: "",
         affiliation: ""
       },

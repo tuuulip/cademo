@@ -6,13 +6,18 @@
     <div class="iden-body">
       <el-table :data="identities" border height="80vh">
         <el-table-column prop="id" label="id" />
-        <el-table-column prop="state" label="state">
+        <el-table-column label="state">
           <template slot-scope="{ row }">
             <span>{{ row.id | stateName(stateMap) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="type" label="type" />
         <el-table-column prop="affiliation" label="affiliation" />
+        <el-table-column label="enrollments">
+          <template slot-scope="{ row }">
+            <span>{{ row.id | enrollentCount(stateMap) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="max_enrollments" label="max_enrollments" />
         <el-table-column label="attrs" width="230px">
           <div slot-scope="{ row }" class="iden-column-attr">
@@ -66,13 +71,20 @@ export default {
     attrJson(obj) {
       return JSON.stringify(obj);
     },
+    enrollentCount(id, stateMap) {
+      const count = stateMap[id];
+      if (count !== null) {
+        return count;
+      }
+      return 0;
+    },
     stateName(id, stateMap) {
       const state = stateMap[id];
       switch (state) {
         case "-1":
-          return `Revoked (${state})`;
+          return `Revoked`;
         default:
-          return `Valid (${state})`;
+          return `Valid`;
       }
     }
   },

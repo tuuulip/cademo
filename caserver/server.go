@@ -6,8 +6,6 @@ import (
 	"cademo/config"
 	"cademo/log"
 
-	"github.com/cloudflare/cfssl/csr"
-	"github.com/hyperledger/fabric-ca/api"
 	"github.com/hyperledger/fabric-ca/lib"
 )
 
@@ -66,7 +64,7 @@ func getServerCfg() *lib.ServerConfig {
 		"org2": []string{"department1", "department2"},
 	}
 	// set csr info
-	csr := defaultCSR()
+	csr := serverCSR()
 
 	// set server config
 	serverCfg := &lib.ServerConfig{
@@ -83,23 +81,4 @@ func getServerCfg() *lib.ServerConfig {
 	}
 	serverCfg.CAcfg.Cfg.Identities.AllowRemove = true
 	return serverCfg
-}
-
-func defaultCSR() *api.CSRInfo {
-	csrName := csr.Name{
-		C:  "CN",
-		ST: "Guang Dong",
-		L:  "Guang Zhou",
-		O:  "My Company",
-		OU: "Administration",
-	}
-	csr := api.CSRInfo{
-		CN:    "fabric-ca-server",
-		Names: []csr.Name{csrName},
-		Hosts: []string{config.C.GetString("caserver.host")},
-		KeyRequest: &api.KeyRequest{
-			ReuseKey: true,
-		},
-	}
-	return &csr
 }

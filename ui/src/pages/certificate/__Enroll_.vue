@@ -17,9 +17,6 @@
           placeholder="Please input password"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="org" label="Org">
-        <el-input v-model="form.org" placeholder="Please input id"></el-input>
-      </el-form-item>
       <el-form-item prop="type" label="Type">
         <el-select v-model="form.type" placeholder="Please select type">
           <el-option
@@ -30,6 +27,18 @@
           >
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item prop="organization" label="Organ">
+        <el-input
+          v-model="form.organization"
+          placeholder="Please input organization"
+        ></el-input>
+      </el-form-item>
+      <el-form-item prop="domain" label="Domain">
+        <el-input
+          v-model="form.domain"
+          placeholder="Please input domain"
+        ></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -49,7 +58,8 @@ export default {
       form: {
         user: "",
         password: "",
-        org: "",
+        organization: "",
+        domain: "",
         type: ""
       }
     };

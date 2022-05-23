@@ -1,24 +1,28 @@
 <template>
   <div class="aff">
     <div class="aff-header">
-      <el-button type="primary">Add</el-button>
+      <el-button type="primary" @click="showDialog">Add</el-button>
     </div>
     <div class="aff-body">
-      <el-table :data="affilliationList">
+      <el-table :data="affilliationList" border>
         <el-table-column prop="name" label="name"></el-table-column>
+        <el-table-column label="operation">
+          <template>
+            <el-button type="text" class="aff-del">delete</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
+    <Add ref="add" @add="addAffiliation" />
   </div>
 </template>
 
 <script>
+import Add from "./__Add_.vue";
 export default {
+  components: { Add },
   data() {
     return {
-      props: {
-        label: "name",
-        children: "affiliations"
-      },
       affiliationInfo: {},
       affilliationList: []
     };
@@ -27,6 +31,12 @@ export default {
     this.getAllAffiliations();
   },
   methods: {
+    showDialog() {
+      this.$refs["add"].show();
+    },
+    hideDialog() {
+      this.$refs["add"].hide();
+    },
     getAllAffiliations() {
       this.$request.get("/affi/all").then(res => {
         this.affiliationInfo = res.data;
@@ -45,7 +55,20 @@ export default {
         this.parseAffiliation(element, affList);
       });
     },
-    handleNodeClick() {}
+    addAffiliation(postData) {
+      this.$request
+        .post("/affi/add", postData)
+        .then(() => {
+          this.hideDialog();
+          this.$notify({
+            title: "success",
+            message: "Add affiliation success.",
+            type: "success"
+          });
+          return this.getAllAffiliations();
+        })
+        .catch(() => {});
+    }
   }
 };
 </script>
@@ -68,5 +91,9 @@ export default {
 .aff-body {
   padding: 0 20px;
   text-align: left;
+}
+
+.aff-del {
+  color: red;
 }
 </style>

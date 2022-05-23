@@ -33,6 +33,11 @@ export default {
           index: "affiliation",
           icon: "el-icon-office-building",
           title: "Affiliation"
+        },
+        {
+          index: "credential",
+          icon: "el-icon-office-building",
+          title: "Credential"
         }
       ]
     };
@@ -51,6 +56,9 @@ export default {
           break;
         case "affiliation":
           this.$router.push("/affiliation").catch(() => {});
+          break;
+        case "credential":
+          this.$router.push("/credential").catch(() => {});
           break;
       }
     }

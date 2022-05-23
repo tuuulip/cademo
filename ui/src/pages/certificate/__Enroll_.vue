@@ -21,6 +21,15 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item prop="type" label="type">
+        <el-select v-model="form.type" placeholder="Please select enrollment type">
+          <el-option 
+            v-for="item in typeOptions"
+            :key="item"
+            :label="item"
+            :value="item" />
+        </el-select>
+      </el-form-item>
       <el-form-item prop="organization" label="Organ">
         <el-input
           readonly
@@ -45,9 +54,10 @@ export default {
       states: [],
       stateMap: {},
       dialogVisible: false,
-      typeOptions: ["client", "orderer", "peer", "user"],
+      typeOptions: ["x509", "idemix"],
       form: {
         user: "",
+        type: "",
         organization: ""
       }
     };
@@ -91,6 +101,10 @@ export default {
     onConfirm() {
       if (this.form.user === "") {
         this.$message.warning("Please select identity.");
+        return;
+      }
+      if (this.form.type === "") {
+        this.$message.warning("Please select enrollment type.");
         return;
       }
       const count = this.stateMap[this.form.user];

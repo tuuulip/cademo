@@ -22,7 +22,7 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 		CSR: *csr,
 		TLS: getClientTls(),
 		Enrollment: api.EnrollmentRequest{
-			Type: "idemix",
+			Type: req.Type,
 		},
 	}
 	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))

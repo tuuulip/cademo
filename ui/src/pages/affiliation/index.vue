@@ -2,12 +2,9 @@
   <div class="aff">
     <div class="aff-header"></div>
     <div class="aff-body">
-      <el-tree
-        :data="affiliationInfo.affiliations"
-        :props="props"
-        @node-click="handleNodeClick"
-        default-expand-all
-      ></el-tree>
+      <el-table :data="affilliationList">
+        <el-table-column prop="name" label="name"></el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -20,7 +17,8 @@ export default {
         label: "name",
         children: "affiliations"
       },
-      affiliationInfo: {}
+      affiliationInfo: {},
+      affilliationList: []
     };
   },
   created() {
@@ -30,6 +28,19 @@ export default {
     getAllAffiliations() {
       this.$request.get("/affi/all").then(res => {
         this.affiliationInfo = res.data;
+        const affilliationList = [];
+        this.parseAffiliation(this.affiliationInfo, affilliationList);
+        this.affilliationList = affilliationList;
+      });
+    },
+    parseAffiliation(affInfo, affList) {
+      if (!affInfo) return;
+      if (affInfo.name) {
+        affList.push({ name: affInfo.name });
+      }
+      if (!affInfo.affiliations) return;
+      affInfo.affiliations.forEach(element => {
+        this.parseAffiliation(element, affList);
       });
     },
     handleNodeClick() {}

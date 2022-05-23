@@ -22,7 +22,7 @@
           </div>
         </el-table-column>
         <el-table-column prop="status" label="status"></el-table-column>
-        <el-table-column prop="expiry" label="expiry"></el-table-column>
+        <el-table-column prop="expiry" label="expiry" width="180px"></el-table-column>
         <el-table-column label="operation">
           <template slot-scope="{ row }">
             <el-button

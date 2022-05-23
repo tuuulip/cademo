@@ -16,7 +16,7 @@ import (
 
 type Controller struct {
 	caServer *lib.Server
-	dbClinet *db.DBClient
+	dbClient *db.DBClient
 }
 
 func NewController(caServer *lib.Server) *Controller {
@@ -26,7 +26,7 @@ func NewController(caServer *lib.Server) *Controller {
 	}
 	return &Controller{
 		caServer: caServer,
-		dbClinet: dbClinet,
+		dbClient: dbClinet,
 	}
 }
 
@@ -161,7 +161,7 @@ func (c *Controller) DeleteCertificate(ctx *gin.Context) {
 		return
 	}
 
-	if err := c.dbClinet.DeleteCertificate(req); err != nil {
+	if err := c.dbClient.DeleteCertificate(req); err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}
@@ -220,7 +220,7 @@ func (c *Controller) DelAffiliation(ctx *gin.Context) {
 }
 
 func (c *Controller) GetUserState(ctx *gin.Context) {
-	states, err := c.dbClinet.QueryIdentityStates()
+	states, err := c.dbClient.QueryIdentityStates()
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return
@@ -229,10 +229,23 @@ func (c *Controller) GetUserState(ctx *gin.Context) {
 }
 
 func (c *Controller) GetCredential(ctx *gin.Context) {
-	cred, err := c.dbClinet.QueryCredentials()
+	cred, err := c.dbClient.QueryCredentials()
 	if err != nil {
 		ResponseFail(ctx, err.Error())
 		return
 	}
 	ResponseSuccess(ctx, cred)
+}
+
+func (c *Controller) DeleteCredential(ctx *gin.Context) {
+	cred := &db.Credentials{}
+	if err := ctx.ShouldBindJSON(cred); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	if err := c.dbClient.DeleteCredential(cred); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, "ok")
 }

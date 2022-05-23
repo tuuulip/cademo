@@ -59,6 +59,7 @@ func main() {
 
 		// idmix
 		v1.GET("/credential/list", controller.GetCredential)
+		v1.POST("/credential/del", controller.DeleteCredential)
 	}
 	port := config.C.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))

@@ -36,7 +36,7 @@ export default {
         },
         {
           index: "credential",
-          icon: "el-icon-office-building",
+          icon: "el-icon-money",
           title: "Credential"
         }
       ]

@@ -47,3 +47,8 @@ func (d *DBClient) QueryCredentials() ([]Credentials, error) {
 	err := d.engine.Find(&creds)
 	return creds, err
 }
+
+func (d *DBClient) DeleteCredential(cred *Credentials) error {
+	_, err := d.engine.Delete(cred)
+	return err
+}

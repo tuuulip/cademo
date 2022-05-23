@@ -19,7 +19,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="max_enrollments" label="max_enrollments" />
-        <el-table-column label="attrs" width="230px">
+        <el-table-column label="attrs">
           <div slot-scope="{ row }" class="iden-column-attr">
             <span class="iden-attr">{{ row.attrs | attrJson }}</span>
             <el-popover trigger="hover" placement="top-start">
@@ -175,7 +175,6 @@ export default {
 }
 
 .iden-attr {
-  width: 200px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

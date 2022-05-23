@@ -18,7 +18,7 @@
         <el-table-column prop="id" label="id" width="100px" />
         <el-table-column prop="serialNumber" label="serial number" />
         <el-table-column prop="aki" label="Authority Key Id" />
-        <el-table-column prop="pem" label="pem" width="230px">
+        <el-table-column prop="pem" label="pem" >
           <div slot-scope="{ row }" class="cert-column-attr">
             <span class="cert-attr">{{ row.pem }}</span>
             <el-popover trigger="hover" placement="top-start" width="600">
@@ -155,7 +155,6 @@ export default {
 }
 
 .cert-attr {
-  width: 200px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

@@ -1,6 +1,8 @@
 <template>
   <div class="aff">
-    <div class="aff-header"></div>
+    <div class="aff-header">
+      <el-button type="primary">Add</el-button>
+    </div>
     <div class="aff-body">
       <el-table :data="affilliationList">
         <el-table-column prop="name" label="name"></el-table-column>
@@ -54,7 +56,13 @@ export default {
 }
 
 .aff-header {
+  width: 100%;
   height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .aff-body {

@@ -54,6 +54,7 @@ func main() {
 
 		// affiliation api
 		v1.GET("/affi/all", controller.AllAffiliations)
+		v1.POST("/affi/add", controller.AddAffiliation)
 	}
 	port := config.C.GetInt("server.port")
 	router.Run(fmt.Sprintf(":%d", port))

@@ -191,6 +191,20 @@ func (c *Controller) AllAffiliations(ctx *gin.Context) {
 	ResponseSuccess(ctx, info)
 }
 
+func (c *Controller) AddAffiliation(ctx *gin.Context) {
+	req := &api.AddAffiliationRequest{}
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	if err := caserver.AddAffiliation(req); err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, "ok")
+
+}
+
 func (c *Controller) GetUserState(ctx *gin.Context) {
 	states, err := c.dbClinet.QueryIdentityStates()
 	if err != nil {

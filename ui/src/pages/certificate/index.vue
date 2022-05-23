@@ -34,7 +34,9 @@
         <el-table-column prop="notAfter" label="not after" />
         <el-table-column label="operation">
           <template slot-scope="{ row }">
-            <el-button type="text">Reenroll</el-button>
+            <el-button type="text" @click="requestReenroll(row.id)"
+              >Reenroll</el-button
+            >
             <el-button
               type="text"
               class="cert-btn-del"
@@ -86,6 +88,20 @@ export default {
         .then(() => {
           this.hideEnroll();
           return this.fetchCertificates();
+        })
+        .catch(() => {});
+    },
+    requestReenroll(id) {
+      this.$confirm("Certificate will be reenroll. Continuer?", "Warning")
+        .then(() => {
+          return this.$request.post("/cert/reenroll", { user: id });
+        })
+        .then(() => {
+          this.$notify({
+            title: "Success",
+            message: "Reenroll success",
+            type: "success"
+          });
         })
         .catch(() => {});
     },

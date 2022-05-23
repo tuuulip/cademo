@@ -43,6 +43,26 @@ func GetAllIdentities() ([]api.IdentityInfo, error) {
 	return identities, err
 }
 
+// get identity by id
+func GetIdentity(id string) (*api.IdentityInfo, error) {
+	admin, err := getAdminIdentity()
+	if err != nil {
+		return nil, err
+	}
+	resp, err := admin.GetIdentity(id, "")
+	if err != nil {
+		return nil, err
+	}
+	info := *&api.IdentityInfo{
+		ID:             resp.ID,
+		Type:           resp.Type,
+		Affiliation:    resp.Affiliation,
+		Attributes:     resp.Attributes,
+		MaxEnrollments: resp.MaxEnrollments,
+	}
+	return &info, err
+}
+
 // Delete identity
 func DeleteIdentity(req *api.RemoveIdentityRequest) error {
 	id, err := getAdminIdentity()

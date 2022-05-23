@@ -23,7 +23,7 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 		TLS: getClientTls(),
 	}
 	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))
-	saveDir := filepath.Join(getHomeDir(), identity.Type, req.User)
+	saveDir := getStoreHome(identity)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func ReEnroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 		return nil, err
 	}
 
-	home := filepath.Join(getHomeDir(), identity.Type, req.User)
+	home := getStoreHome(identity)
 	id, err := loadIdentity(home)
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func EnrollTLS(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 		},
 	}
 	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))
-	saveDir := filepath.Join(getHomeDir(), identity.Type, req.User)
+	saveDir := getStoreHome(identity)
 	resp, err := cfg.Enroll(enrollUrl, saveDir)
 	if err != nil {
 		return nil, err
@@ -128,4 +128,26 @@ func getEnrollUrl(user, pass string) string {
 	}
 	url := fmt.Sprintf("%s://%s:%s@%s:%d", proto, user, pass, host, port)
 	return url
+}
+
+// certificate store home
+func getStoreHome(identity *api.IdentityInfo) string {
+	domain := identity.Affiliation + ".cademo.com"
+	storeLocation := filepath.Join(
+		getHomeDir(),
+		"organizations",
+		domain,
+		identity.Type+"s",
+	)
+	lastDir := ""
+	switch identity.Type {
+	case "peer", "orderer":
+		lastDir = identity.ID + "." + domain
+	case "user":
+		lastDir = identity.ID + "@" + domain
+	default:
+		lastDir = identity.Type + "_" + identity.ID
+	}
+	storeLocation = filepath.Join(storeLocation, lastDir)
+	return storeLocation
 }

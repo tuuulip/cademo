@@ -37,7 +37,10 @@
           <template slot-scope="{ row }">
             <div>
               <el-button type="text">Edit</el-button>
-              <el-button type="text" @click="revokeIdentity(row.id)"
+              <el-button
+                type="text"
+                @click="revokeIdentity(row.id)"
+                :disabled="row.id === 'admin'"
                 >Revoke</el-button
               >
               <el-button
@@ -126,7 +129,7 @@ export default {
         .post("/id/register", postData)
         .then(() => {
           this.hideDialog();
-          return this.fetchIdentities();
+          return Promise.all([this.fetchIdentities(), this.fetchStates()]);
         })
         .catch(() => {});
     },
@@ -142,7 +145,8 @@ export default {
       this.$request
         .post("/id/revoke", { id })
         .then(() => {
-          return this.fetchIdentities();
+          this.$notify({ title: "Revoke sucess.", type: "success" });
+          return this.fetchStates();
         })
         .catch(() => {});
     }

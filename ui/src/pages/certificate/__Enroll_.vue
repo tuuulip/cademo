@@ -22,12 +22,16 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="type" label="type">
-        <el-select v-model="form.type" placeholder="Please select enrollment type">
-          <el-option 
+        <el-select
+          v-model="form.type"
+          placeholder="Please select enrollment type"
+        >
+          <el-option
             v-for="item in typeOptions"
             :key="item"
             :label="item"
-            :value="item" />
+            :value="item"
+          />
         </el-select>
       </el-form-item>
       <el-form-item prop="organization" label="Organ">

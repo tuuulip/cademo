@@ -227,3 +227,12 @@ func (c *Controller) GetUserState(ctx *gin.Context) {
 	}
 	ResponseSuccess(ctx, states)
 }
+
+func (c *Controller) GetCredential(ctx *gin.Context) {
+	cred, err := c.dbClinet.QueryCredentials()
+	if err != nil {
+		ResponseFail(ctx, err.Error())
+		return
+	}
+	ResponseSuccess(ctx, cred)
+}

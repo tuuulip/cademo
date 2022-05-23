@@ -21,6 +21,9 @@ func Enroll(req *message.Enroll) (*lib.EnrollmentResponse, error) {
 	cfg := &lib.ClientConfig{
 		CSR: *csr,
 		TLS: getClientTls(),
+		Enrollment: api.EnrollmentRequest{
+			Type: "idemix",
+		},
 	}
 	enrollUrl := getEnrollUrl(req.User, defaultIdentityPassword(req.User))
 	saveDir := getStoreHome(identity)

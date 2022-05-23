@@ -41,3 +41,9 @@ func (d *DBClient) DeleteCertificate(cert *Certificates) error {
 	_, err := d.engine.Delete(cert)
 	return err
 }
+
+func (d *DBClient) QueryCredentials() ([]Credentials, error) {
+	creds := []Credentials{}
+	err := d.engine.Find(&creds)
+	return creds, err
+}

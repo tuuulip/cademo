@@ -19,4 +19,5 @@ caadmin:
   user: admin
   pass: adminpw
 
+caname: ca
 cahome: cahome

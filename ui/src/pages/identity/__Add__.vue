@@ -46,7 +46,7 @@ export default {
         type: "",
         affiliation: ""
       },
-      typeOptions: ["client", "orderer", "peer", "user"]
+      typeOptions: ["admin", "user", "client", "orderer", "peer"]
     };
   },
   methods: {

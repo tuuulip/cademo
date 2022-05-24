@@ -69,6 +69,9 @@ func getServerCfg() *lib.ServerConfig {
 	// set server config
 	serverCfg := &lib.ServerConfig{
 		CAcfg: lib.CAConfig{
+			CA: lib.CAInfo{
+				Name: config.C.GetString("caname"),
+			},
 			DB:           db,
 			Affiliations: affiliations,
 			Registry: lib.CAConfigRegistry{

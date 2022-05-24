@@ -28,15 +28,7 @@ func GetServer() *lib.Server {
 }
 
 func getServerCfg() *lib.ServerConfig {
-	dbsrc := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		config.C.GetString("cadb.host"),
-		config.C.GetInt("cadb.port"),
-		config.C.GetString("cadb.user"),
-		config.C.GetString("cadb.password"),
-		config.C.GetString("cadb.dbname"),
-		config.C.GetString("cadb.sslmode"),
-	)
+
 	// set admin info
 	id := lib.CAConfigIdentity{
 		Name:           config.C.GetString("caadmin.user"),
@@ -54,10 +46,7 @@ func getServerCfg() *lib.ServerConfig {
 		},
 	}
 	// set db config
-	db := lib.CAConfigDB{
-		Type:       "postgres",
-		Datasource: dbsrc,
-	}
+	db := getServerDBConfig()
 	// set affiliations
 	affiliations := map[string]interface{}{
 		"org1": []string{"department1", "department2"},
@@ -84,4 +73,21 @@ func getServerCfg() *lib.ServerConfig {
 	}
 	serverCfg.CAcfg.Cfg.Identities.AllowRemove = true
 	return serverCfg
+}
+
+func getServerDBConfig() lib.CAConfigDB {
+	dbsrc := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		config.C.GetString("cadb.host"),
+		config.C.GetInt("cadb.port"),
+		config.C.GetString("cadb.user"),
+		config.C.GetString("cadb.password"),
+		config.C.GetString("cadb.dbname"),
+		config.C.GetString("cadb.sslmode"),
+	)
+	db := lib.CAConfigDB{
+		Type:       "postgres",
+		Datasource: dbsrc,
+	}
+	return db
 }

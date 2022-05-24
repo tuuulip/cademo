@@ -11,7 +11,7 @@ cadb:
   host: 10.10.7.35
   port: 5432
   user: root
-  password: baas123
+  password: your_db_password
   dbname: fabric_ca_zoo
   sslmode: disable
 

@@ -149,16 +149,17 @@ func getStoreHome(identity *api.IdentityInfo) string {
 		getHomeDir(),
 		"organizations",
 		domain,
-		identity.Type+"s",
 	)
 	lastDir := ""
 	switch identity.Type {
-	case "peer", "orderer":
-		lastDir = identity.ID + "." + domain
-	case "user":
-		lastDir = identity.ID + "@" + domain
+	case "peer":
+		lastDir = fmt.Sprintf("peers/%s.%s", identity.ID, domain)
+	case "orderer":
+		lastDir = fmt.Sprintf("orderers/%s.%s", identity.ID, domain)
+	case "user", "admin", "client":
+		lastDir = fmt.Sprintf("users/%s@%s", identity.ID, domain)
 	default:
-		lastDir = identity.Type + "_" + identity.ID
+		lastDir = fmt.Sprintf("others/%s@%s", identity.ID, domain)
 	}
 	storeLocation = filepath.Join(storeLocation, lastDir)
 	return storeLocation

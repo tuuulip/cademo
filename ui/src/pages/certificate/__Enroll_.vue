@@ -61,7 +61,7 @@ export default {
       typeOptions: ["x509", "idemix"],
       form: {
         user: "",
-        type: "",
+        type: "x509",
         organization: ""
       }
     };
